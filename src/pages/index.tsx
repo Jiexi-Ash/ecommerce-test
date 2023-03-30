@@ -1,9 +1,21 @@
 import { type NextPage } from "next";
 import Head from "next/head";
+import Image from "next/image";
+import { EyeIcon } from "@heroicons/react/24/outline";
 
 import { api } from "~/utils/api";
 import Navbar from "~/components/Navbar";
 import Search from "~/components/Search";
+import Link from "next/link";
+
+//  product type
+type TProduct = {
+  id?: number;
+  name: string;
+  price: number;
+  imageUrl: string;
+  category: string;
+};
 
 const Home: NextPage = () => {
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
@@ -18,16 +30,132 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className="flex min-h-screen flex-col">
+      <main className="flex min-h-screen w-full flex-col">
         <Search />
+        <div className="flex w-full py-4 px-10">
+          <form className="flex w-full">
+            <select name="category" id="category">
+              {/* default category but disabled */}
+              <option value="Category" selected disabled>
+                Category
+              </option>
+              <option value="All">All</option>
+              <option value="Tops">Tops</option>
+              <option value="Bottoms">Bottoms</option>
+              <option value="Hats & Beanies">Hats & Beanies</option>
+              <option value="Accessories">Accessories</option>
+            </select>
+          </form>
+        </div>
+        {/* <div className="flex w-full gap-2 py-2 px-16"> */}
+        <div className="grid grid-cols-4 gap-6 py-2 px-10">
+          <Product
+            name="Long Dress"
+            imageUrl="/assets/images/dresses/black-dress.png"
+            price={200}
+            category="Dresses"
+          />
+          <Product
+            name="Floral Dress"
+            imageUrl="/assets/images/dresses/floral-dress.png"
+            price={300}
+            category="Dresses"
+          />
+          <Product
+            name="Short  Dress"
+            imageUrl="/assets/images/dresses/blue-short-sleeve-dress.png"
+            price={150}
+            category="Dresses"
+          />
+          <Product
+            name="Tube Dress"
+            imageUrl="/assets/images/dresses/tube-dress.png"
+            price={100}
+            category="Dresses"
+          />
+          <Product
+            name="Shoulder Dress"
+            imageUrl="/assets/images/dresses/shoulder-dress.png"
+            price={100}
+            category="Dresses"
+          />
+          <Product
+            name="Red Long Dress"
+            imageUrl="/assets/images/dresses/red-long-dress.png"
+            price={100}
+            category="Dresses"
+          />
+          <Product
+            name="Short Floral Dress"
+            imageUrl="/assets/images/dresses/short-floral-dress.png"
+            price={400}
+            category="Dresses"
+          />
+          <Product
+            name="Tracksuit"
+            imageUrl="/assets/images/dresses/tracksuit.png"
+            price={250}
+            category="Dresses"
+          />
+        </div>
         {/* <div>
           {user.isSignedIn && <SignOutButton />}
           {!user.isSignedIn && <SignInButton />}
         </div>
         <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" /> */}
+
+        <div className="w-full items-center justify-center py-6"></div>
       </main>
     </>
   );
 };
 
 export default Home;
+
+//  create product with props and destructured props
+const Product = ({ name, price, imageUrl, category }: TProduct) => {
+  return (
+    <div className="flex flex-col">
+      <div className="group relative flex h-[600px]  w-[450px] flex-col items-center justify-center rounded-lg bg-gray-100">
+        <Image
+          src={imageUrl}
+          width={400}
+          height={300}
+          alt=""
+          className="object-cover"
+        />
+        <div className="absolute bottom-0 block h-0 max-h-16 w-full  transform overflow-hidden rounded-b-lg rounded-bl-lg   bg-transparent text-white transition-all duration-200 ease-in-out group-hover:h-16">
+          <div className="flex h-full w-full items-center justify-center">
+            <div className="mx-2 flex w-full cursor-pointer items-center justify-center gap-2 bg-black py-2">
+              <Link
+                href=""
+                className="text-center text-sm uppercase text-white"
+              >
+                Quick View
+              </Link>
+              <EyeIcon className="h-4 w-4 font-bold" />
+            </div>
+            {/* <Link
+              href=""
+              className="mx-2 w-full bg-black py-2 text-center text-sm text-white"
+            >
+              Quick View
+            </Link> */}
+          </div>
+        </div>
+      </div>
+      <div className="flex w-full flex-col  pt-2">
+        <div className="font-bold tracking-wider">{name}</div>
+        <div className="font-light tracking-wider text-black ">
+          R{price.toFixed(2)}
+        </div>
+        <div className="flex gap-2 pt-2 ">
+          <div className="h-4 w-4 rounded-full border  border-white bg-red-500 hover:cursor-pointer"></div>
+          <div className="h-4 w-4 rounded-full border  border-white bg-blue-500 hover:cursor-pointer"></div>
+          <div className="h-4 w-4 rounded-full border  border-white bg-pink-500 hover:cursor-pointer"></div>
+          <div className="h-4 w-4 rounded-full border border-white bg-yellow-500 hover:cursor-pointer"></div>
+        </div>
+      </div>
+    </div>
+  );
+};

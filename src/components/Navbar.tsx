@@ -1,9 +1,10 @@
 import React from "react";
 import Link from "next/link";
 
-import { useUser } from "@clerk/nextjs";
+import { useUser, SignIn } from "@clerk/nextjs";
 import { SignInButton } from "@clerk/nextjs";
 import { Bars3Icon } from "@heroicons/react/24/solid";
+import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 
 const UserButton = () => {
   const user = useUser();
@@ -15,6 +16,7 @@ const UserButton = () => {
     <div>
       {user.isSignedIn && <button>{username}</button>}
       {!user.isSignedIn && <SignInButton />}
+      <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
     </div>
   );
 };
@@ -23,9 +25,9 @@ function Navbar() {
   const user = useUser();
 
   return (
-    <header className="border-b border-black p-6 ">
-      <nav className="flex items-center justify-between">
-        <ul className="hidden items-center space-x-6 lg:flex">
+    <header className="border-b border-black px-10 py-6">
+      <nav className="flex items-center justify-between ">
+        <ul className="hidden items-center space-x-6 lg:flex ">
           <li>
             <Link
               href="/shop"
@@ -66,7 +68,7 @@ function Navbar() {
           <li>{user.isSignedIn && <UserButton />}</li>
           <li className="border-l border-black pl-4">
             <Link href="/cart" className="font-medium ">
-              Cart
+              <ShoppingBagIcon className="h-6 w-6" />
             </Link>
           </li>
         </ul>

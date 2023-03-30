@@ -14,7 +14,7 @@ function Search() {
   };
 
   return (
-    <div className="border-b border-black px-6 py-2">
+    <div className="border-b border-black px-10 py-2">
       <form className="flex">
         <input
           type="text"
@@ -25,7 +25,7 @@ function Search() {
 
         {showClear && (
           <button className="px-2 py-2 focus:border-none">
-            <XMarkIcon className="h-4 w-4" />
+            <XMarkIcon className="h-4 w-4 font-bold" />
           </button>
         )}
       </form>
