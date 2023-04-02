@@ -14,11 +14,11 @@ function Search() {
   };
 
   return (
-    <div className="border-b border-black px-10 py-2">
+    <div className="border-b border-black px-6 py-2 xl:px-10">
       <form className="flex">
         <input
           type="text"
-          className="w-full px-2 py-2 focus:border-none focus:outline-none"
+          className="w-full py-2 focus:border-none focus:outline-none"
           placeholder="Search"
           onChange={handleSearch}
         />

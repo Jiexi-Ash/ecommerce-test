@@ -8,6 +8,9 @@ import Navbar from "~/components/Navbar";
 import Search from "~/components/Search";
 import Link from "next/link";
 
+import { useUser, SignIn, SignOutButton } from "@clerk/nextjs";
+import { SignInButton } from "@clerk/nextjs";
+
 //  product type
 type TProduct = {
   id?: number;
@@ -18,6 +21,7 @@ type TProduct = {
 };
 
 const Home: NextPage = () => {
+  const user = useUser();
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   // const user = useUser();
@@ -32,7 +36,7 @@ const Home: NextPage = () => {
       <Navbar />
       <main className="flex min-h-screen w-full flex-col">
         <Search />
-        <div className="flex w-full py-4 px-10">
+        <div className="flex w-full py-4 px-6 xl:px-10">
           <form className="flex w-full">
             <select name="category" id="category">
               {/* default category but disabled */}
@@ -48,7 +52,7 @@ const Home: NextPage = () => {
           </form>
         </div>
         {/* <div className="flex w-full gap-2 py-2 px-16"> */}
-        <div className="grid grid-cols-4 gap-6 py-2 px-10">
+        <div className="grid w-full grid-cols-1 gap-2  space-x-2 md:grid-cols-2 md:px-6  lg:grid-cols-3 xl:grid-cols-4  xl:py-2 xl:px-10">
           <Product
             name="Long Dress"
             imageUrl="/assets/images/dresses/black-dress.png"
@@ -73,12 +77,7 @@ const Home: NextPage = () => {
             price={100}
             category="Dresses"
           />
-          <Product
-            name="Shoulder Dress"
-            imageUrl="/assets/images/dresses/shoulder-dress.png"
-            price={100}
-            category="Dresses"
-          />
+
           <Product
             name="Red Long Dress"
             imageUrl="/assets/images/dresses/red-long-dress.png"
@@ -98,13 +97,6 @@ const Home: NextPage = () => {
             category="Dresses"
           />
         </div>
-        {/* <div>
-          {user.isSignedIn && <SignOutButton />}
-          {!user.isSignedIn && <SignInButton />}
-        </div>
-        <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" /> */}
-
-        <div className="w-full items-center justify-center py-6"></div>
       </main>
     </>
   );
@@ -116,11 +108,11 @@ export default Home;
 const Product = ({ name, price, imageUrl, category }: TProduct) => {
   return (
     <div className="flex flex-col">
-      <div className="group relative flex h-[600px]  w-[450px] flex-col items-center justify-center rounded-lg bg-gray-100">
+      <div className="group  relative flex w-full flex-col  items-center justify-center rounded-lg bg-gray-100 xl:h-[600px] xl:w-full">
         <Image
           src={imageUrl}
           width={400}
-          height={300}
+          height={400}
           alt=""
           className="object-cover"
         />
@@ -144,8 +136,10 @@ const Product = ({ name, price, imageUrl, category }: TProduct) => {
           </div>
         </div>
       </div>
-      <div className="flex w-full flex-col  pt-2">
-        <div className="font-bold tracking-wider">{name}</div>
+      <div className="flex w-full flex-col  px-2 pt-2">
+        <h4 className="font-bold tracking-wider">
+          <Link href="">{name}</Link>
+        </h4>
         <div className="font-light tracking-wider text-black ">
           R{price.toFixed(2)}
         </div>

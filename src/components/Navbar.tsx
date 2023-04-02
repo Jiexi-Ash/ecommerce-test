@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "next/link";
 
-import { useUser, SignIn } from "@clerk/nextjs";
+import { useUser, SignIn, SignOutButton } from "@clerk/nextjs";
 import { SignInButton } from "@clerk/nextjs";
 import { Bars3Icon } from "@heroicons/react/24/solid";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
@@ -13,11 +13,13 @@ const UserButton = () => {
 
   if (!user) return null;
   return (
-    <div>
-      {user.isSignedIn && <button>{username}</button>}
-      {!user.isSignedIn && <SignInButton />}
-      <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
-    </div>
+    <>
+      <div>
+        {user.isSignedIn && <div>{username}</div>}
+        {!user.isSignedIn && <SignInButton />}
+        <SignIn path="/sign-in" routing="path" signUpUrl="/sign-up" />
+      </div>
+    </>
   );
 };
 
@@ -25,8 +27,8 @@ function Navbar() {
   const user = useUser();
 
   return (
-    <header className="border-b border-black px-10 py-6">
-      <nav className="flex items-center justify-between ">
+    <header className="w-full border-b border-black px-6 py-6 xl:px-10">
+      <nav className="flex w-full items-center justify-between">
         <ul className="hidden items-center space-x-6 lg:flex ">
           <li>
             <Link
@@ -65,7 +67,7 @@ function Navbar() {
         <h1 className="text-lg font-medium uppercase">Flee-mark</h1>
 
         <ul className="hidden space-x-6 lg:flex">
-          <li>{user.isSignedIn && <UserButton />}</li>
+          <li>{<UserButton />}</li>
           <li className="border-l border-black pl-4">
             <Link href="/cart" className="font-medium ">
               <ShoppingBagIcon className="h-6 w-6" />
