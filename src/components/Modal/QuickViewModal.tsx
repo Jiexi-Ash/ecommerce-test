@@ -33,7 +33,7 @@ function QuickViewModal({ handleClose, id }: TQuickViewModal) {
     <Backdrop onClick={handleClose}>
       <motion.div
         onClick={(e) => e.stopPropagation()}
-        className="] mx-6 h-[800px] w-full overflow-y-auto rounded-sm border bg-white p-10 lg:mx-0 lg:h-[700px] lg:max-w-4xl"
+        className="mx-6 h-[800px] w-full overflow-y-auto rounded-sm border bg-white p-10 lg:mx-0 lg:h-[700px] lg:max-w-4xl"
         variants={modalVariants}
         initial="hidden"
         animate="visible"

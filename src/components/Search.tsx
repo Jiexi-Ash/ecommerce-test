@@ -14,18 +14,18 @@ function Search() {
   };
 
   return (
-    <div className="border-b border-black px-6 py-2 xl:px-10">
+    <div className="hidden border-b px-6 py-2 md:block lg:border-black xl:px-8">
       <form className="flex">
         <input
           type="text"
-          className="w-full py-2 focus:border-none focus:outline-none"
+          className="w-full border-none py-2 focus:outline-none focus:ring-0"
           placeholder="Search"
           onChange={handleSearch}
         />
 
         {showClear && (
           <button className="px-2 py-2 focus:border-none">
-            <XMarkIcon className="h-4 w-4 font-bold" />
+            <XMarkIcon className="h-5 w-5 font-bold" />
           </button>
         )}
       </form>

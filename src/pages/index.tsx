@@ -37,21 +37,7 @@ const Home: NextPage = () => {
       <Navbar />
       <main className="flex min-h-screen w-full flex-col">
         <Search />
-        <div className="flex w-full py-4 px-6 xl:px-10">
-          <form className="flex w-full">
-            <select name="category" id="category">
-              {/* default category but disabled */}
-              <option value="Category" selected disabled>
-                Category
-              </option>
-              <option value="All">All</option>
-              <option value="Tops">Tops</option>
-              <option value="Bottoms">Bottoms</option>
-              <option value="Hats & Beanies">Hats & Beanies</option>
-              <option value="Accessories">Accessories</option>
-            </select>
-          </form>
-        </div>
+        <div className="flex w-full py-4 px-6 xl:px-10"></div>
         <Products />
       </main>
     </>
