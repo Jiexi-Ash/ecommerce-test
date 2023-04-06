@@ -78,7 +78,9 @@ function Navbar() {
             </li>
           </ul>
 
-          <h1 className="text-lg font-medium uppercase">Flee-mark</h1>
+          <Link href="/">
+            <h1 className="text-lg font-medium uppercase">Flee-mark</h1>
+          </Link>
 
           <ul className="hidden space-x-6 lg:flex">
             <li>{<UserButton />}</li>

@@ -5,6 +5,8 @@ export const ProductData = [
     imageUrl: "/assets/images/dresses/floral-dress.png",
     price: 300,
     category: "Dresses",
+    sale: true,
+    salePrice: 200,
   },
   {
     id: "2",
@@ -26,6 +28,7 @@ export const ProductData = [
     imageUrl: "/assets/images/dresses/red-long-dress.png",
     price: 100,
     category: "Dresses",
+    sale: false,
   },
   {
     id: "5",
@@ -33,6 +36,8 @@ export const ProductData = [
     imageUrl: "/assets/images/dresses/short-floral-dress.png",
     price: 400,
     category: "Dresses",
+    sale: true,
+    salePrice: 200,
   },
   {
     id: "6",
@@ -40,5 +45,6 @@ export const ProductData = [
     imageUrl: "/assets/images/dresses/tracksuit.png",
     price: 250,
     category: "Dresses",
+    sale: false,
   },
 ];

@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import Backdrop from "./Backdrop";
 import { ProductData } from "~/data";
+import Link from "next/link";
 
 type TQuickViewModal = {
   handleClose: () => void;
@@ -29,20 +30,45 @@ function QuickViewModal({ handleClose, id }: TQuickViewModal) {
     },
   };
 
+  const containerVariants = {
+    rest: { width: 0 },
+    hover: {
+      width: "100%",
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      },
+    },
+  };
+
+  const linkVariants = {
+    rest: {},
+    hover: {
+      width: "100%",
+      transition: {
+        duration: 0.5,
+        ease: "easeInOut",
+      },
+    },
+  };
+
   return (
     <Backdrop onClick={handleClose}>
       <motion.div
         onClick={(e) => e.stopPropagation()}
-        className="mx-6 h-[800px] w-full overflow-y-auto rounded-sm border bg-white p-10 lg:mx-0 lg:h-[700px] lg:max-w-4xl"
+        className="mx-6  max-h-[700px] w-full overflow-y-auto rounded-sm border bg-white p-10 lg:mx-0 lg:max-w-4xl"
         variants={modalVariants}
         initial="hidden"
         animate="visible"
         exit="exit"
       >
         <div className="flex flex-col lg:flex-row lg:space-x-10">
-          <div className="flex h-full w-full items-center justify-center bg-gray-100 lg:max-w-sm">
-            <Image src={product!.imageUrl} width={400} height={400} alt="" />
+          <div className="flex flex-col">
+            <div className="flex h-full w-full flex-col items-center justify-center bg-gray-100 lg:max-w-sm">
+              <Image src={product!.imageUrl} width={400} height={400} alt="" />
+            </div>
           </div>
+
           <div className="flex-grow flex-col">
             <div className="mt-6 flex flex-col">
               <h1 className="text-2xl font-bold text-black">{product!.name}</h1>
@@ -98,13 +124,31 @@ function QuickViewModal({ handleClose, id }: TQuickViewModal) {
             </div>
 
             <div className="mt-6 flex w-full flex-col space-y-2">
-              <button className="border border-black bg-white px-4 py-2 text-black">
+              <button className="border border-black bg-white px-4 py-2 text-black transition-all duration-200 ease-out ">
                 Add to wishlist
               </button>
               <button className="bg-black px-4 py-2 text-center text-white">
                 Add to cart
               </button>
             </div>
+            <div></div>
+            <motion.div
+              className="mt-6 flex max-w-[80px] flex-col"
+              initial="rest"
+              whileHover="hover"
+              variants={containerVariants}
+            >
+              <Link
+                href={`/products/${product!.id}`}
+                className="whitespace-nowrap pb-2 text-sm"
+              >
+                View Product
+              </Link>
+              <motion.hr
+                className="h-[3px] w-0 bg-black"
+                variants={linkVariants}
+              />
+            </motion.div>
           </div>
         </div>
 
