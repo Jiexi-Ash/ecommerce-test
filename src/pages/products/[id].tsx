@@ -11,7 +11,8 @@ import { ProductData } from "~/data";
 import Link from "next/link";
 
 const Product: NextPage = () => {
-  const id = useRouter().query.id;
+  const router = useRouter();
+  const id = router.query.id;
 
   const product = ProductData.find((product) => product.id === id);
   console.log("product", product);
@@ -61,7 +62,7 @@ const Product: NextPage = () => {
       <main className="flex min-h-screen w-full flex-col">
         {product && (
           <motion.div
-            className="mt-6 flex w-full flex-col items-center justify-center"
+            className="mt-6 flex w-full flex-col items-center justify-center px-6 xl:px-10"
             variants={productVariants}
             initial="hidden"
             animate="visible"
@@ -73,23 +74,30 @@ const Product: NextPage = () => {
               <Image src={product.imageUrl} width={300} height={300} alt="" />
             </motion.div> */}
             <motion.div
-              className="relative flex w-full flex-col overflow-hidden"
+              className="relative flex w-full flex-col overflow-hidden lg:flex-row"
               animate="visible"
               variants={productVariants}
             >
               <motion.div
                 variants={productImageVariants}
-                className="relative flex h-[450px] w-full items-center justify-center overflow-hidden bg-gray-100"
+                className="relative flex  w-full items-center justify-center overflow-hidden bg-gray-100 lg:max-w-xl"
               >
                 <Image
                   src={product.imageUrl}
                   width={300}
                   height={300}
                   alt=""
-                  className=""
+                  className="lg:hidden"
+                />
+                <Image
+                  src={product.imageUrl}
+                  width={400}
+                  height={3400}
+                  alt=""
+                  className="hidden lg:block"
                 />
               </motion.div>
-              <div className="my-6 flex flex-col  px-6">
+              <div className="my-6 flex w-full  flex-col px-6 lg:ml-20 lg:max-w-lg">
                 <div className="flex w-full flex-col space-y-2">
                   <h1 className="text-xl font-bold">{product.name}</h1>
 

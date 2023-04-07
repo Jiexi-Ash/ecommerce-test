@@ -1,9 +1,12 @@
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useState } from "react";
+
 import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import { motion } from "framer-motion";
+
 import Backdrop from "./Backdrop";
 import { ProductData } from "~/data";
-import Link from "next/link";
 
 type TQuickViewModal = {
   handleClose: () => void;
@@ -11,8 +14,14 @@ type TQuickViewModal = {
 };
 
 function QuickViewModal({ handleClose, id }: TQuickViewModal) {
+  const [quantity, setQuantity] = useState(1);
+  const router = useRouter();
   const product = ProductData.find((product) => product.id === id);
   console.log("product", product);
+
+  const handleRoute = () => {
+    // products and category
+  };
 
   const modalVariants = {
     hidden: {
@@ -107,16 +116,21 @@ function QuickViewModal({ handleClose, id }: TQuickViewModal) {
               <div className="mt-4 flex">
                 <button
                   type="button"
-                  className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white"
+                  className={` flex h-10 w-10 items-center justify-center border border-gray-100 bg-white disabled:bg-gray-100`}
+                  disabled={quantity === 1}
+                  onClick={
+                    quantity > 1 ? () => setQuantity(quantity - 1) : undefined
+                  }
                 >
                   -
                 </button>
                 <span className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                  1
+                  {quantity}
                 </span>
                 <button
                   type="button"
                   className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white"
+                  onClick={() => setQuantity(quantity + 1)}
                 >
                   +
                 </button>
