@@ -8,8 +8,11 @@ import { SignInButton } from "@clerk/nextjs";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
 import Search from "./Search";
+import useCart from "~/hooks/useCart";
+import { useAppSelector } from "~/store/hooks";
 
 const UserButton = () => {
+  useCart();
   const user = useUser();
 
   const username = user.user?.username;
@@ -27,6 +30,8 @@ const UserButton = () => {
 };
 
 function Navbar() {
+  const cartQuantity = useAppSelector((state) => state.cart.totalQuantity);
+  console.log(cartQuantity);
   const [isOpen, setIsOpen] = useState(false);
 
   const user = useUser();
@@ -86,7 +91,12 @@ function Navbar() {
             <li>{<UserButton />}</li>
             <li className="border-l border-black pl-4">
               <Link href="/cart" className="font-medium ">
-                <ShoppingBagIcon className="h-6 w-6" />
+                <div className="relative">
+                  <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black text-xs text-white">
+                    {cartQuantity}
+                  </div>
+                  <ShoppingBagIcon className="h-6 w-6" />
+                </div>
               </Link>
             </li>
           </ul>
@@ -197,7 +207,12 @@ export const MobileNav = () => {
             </li>
             <li className="border-slate-50">
               <Link href="/cart" className="font-medium ">
-                <ShoppingBagIcon className="h-6 w-6" />
+                <div className="relative">
+                  <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
+                    {10}
+                  </div>
+                  <ShoppingBagIcon className="h-6 w-6" />
+                </div>
               </Link>
             </li>
           </ul>

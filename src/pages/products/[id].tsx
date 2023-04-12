@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -6,20 +7,32 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import Navbar from "~/components/Navbar";
 import ProductItem from "~/components/Product/ProductItem";
+import { addToCart } from "~/store/slices/cartSlice";
+import { useAppDispatch } from "~/store/hooks";
 
 import { ProductData } from "~/data";
 import Link from "next/link";
+import ProductSize from "~/components/Product/ProductSize";
 
 const Product: NextPage = () => {
+  const [itemMaxQuantity, setItemMaxQuantity] = useState<number>(1);
+  const [itemQuantity, setItemQuantity] = useState<number>(1);
+  const dispatch = useAppDispatch();
   const router = useRouter();
   const id = router.query.id;
 
   const product = ProductData.find((product) => product.id === id);
   console.log("product", product);
-  //   const user = useUser();
+
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   // const user = useUser();
+
+  useEffect(() => {
+    if (product) {
+      setItemMaxQuantity(product.quantity);
+    }
+  }, [product]);
 
   const productVariants = {
     hidden: {
@@ -48,9 +61,30 @@ const Product: NextPage = () => {
   };
 
   const handleClick = () => {
-    console.log("clicked");
+    console.log("Hello");
   };
 
+  const handleAddToCart = () => {
+    if (!product) return;
+    dispatch(
+      addToCart({
+        ...product,
+        quantity: itemQuantity,
+      })
+    );
+  };
+
+  const handleIncreaseQuantity = () => {
+    if (itemQuantity === itemMaxQuantity) return;
+
+    setItemQuantity((prev) => prev + 1);
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (itemQuantity === 1) return;
+
+    setItemQuantity((prev) => prev - 1);
+  };
   return (
     <>
       <Head>
@@ -114,25 +148,7 @@ const Product: NextPage = () => {
                   </span>
                 </div>
                 <hr className="mt-6 w-full" />
-                <div className="mt-6 flex flex-col">
-                  <div className="text-sm font-light">
-                    Size: <span className="font-medium">Small</span>
-                  </div>
-                  <div className="mt-4  flex space-x-2">
-                    <div className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                      XS
-                    </div>
-                    <div className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                      S
-                    </div>
-                    <div className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                      M
-                    </div>
-                    <div className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                      L
-                    </div>
-                  </div>
-                </div>
+                <ProductSize size={product.sizes} />
                 <div className="mt-6 flex flex-col ">
                   <div className="text-sm font-light">
                     Color: <span className="font-medium">Red</span>
@@ -149,25 +165,34 @@ const Product: NextPage = () => {
                       <button
                         type="button"
                         className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white"
+                        onClick={handleDecreaseQuantity}
                       >
                         -
                       </button>
                       <span className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                        1
+                        {itemQuantity}
                       </span>
                       <button
                         type="button"
                         className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white"
+                        onClick={handleIncreaseQuantity}
                       >
                         +
                       </button>
                     </div>
                   </div>
                   <div className="mt-6 flex w-full flex-col space-y-2">
-                    <button className="border border-black bg-white px-4 py-2 text-black transition-all duration-200 ease-out ">
+                    <button
+                      className="border border-black bg-white px-4 py-2 text-black transition-all duration-200 ease-out "
+                      onClick={handleAddToCart}
+                    >
                       Add to wishlist
                     </button>
-                    <button className="bg-black px-4 py-2 text-center text-white">
+                    <button
+                      className="bg-black px-4 py-2 text-center text-white"
+                      type="button"
+                      onClick={handleAddToCart}
+                    >
                       Add to cart
                     </button>
                   </div>
