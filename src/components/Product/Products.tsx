@@ -4,9 +4,15 @@ import { AnimatePresence } from "framer-motion";
 
 import { ProductData } from "~/data";
 import QuickViewModal from "../Modal/QuickViewModal";
+import CartModal from "../Modal/CartModal";
 import Product from "./ProductItem";
 
+import { useAppDispatch, useAppSelector } from "~/store/hooks";
+import { setCartModal } from "~/store/slices/cartSlice";
+
 function Products() {
+  const cartModal = useAppSelector((state) => state.cart.cartModal);
+  const dispatch = useAppDispatch();
   const [modalOpen, setModalOpen] = useState(false);
 
   const [selectedId, setSelectedId] = useState("");
@@ -16,18 +22,21 @@ function Products() {
   const handleModal = (id: string) => {
     setModalOpen(true);
     setSelectedId(id);
-    console.log("id", id);
+  };
+
+  const handleCartModalClose = () => {
+    dispatch(setCartModal(false));
   };
 
   // stop body scroll when modal is open
 
   useEffect(() => {
-    if (modalOpen) {
+    if (modalOpen || cartModal) {
       document.body.style.overflow = "hidden";
     } else {
       document.body.style.overflow = "unset";
     }
-  }, [modalOpen]);
+  }, [modalOpen, cartModal]);
 
   return (
     <>
@@ -49,6 +58,7 @@ function Products() {
         {modalOpen && selectedId && (
           <QuickViewModal handleClose={closeModal} id={selectedId} />
         )}
+        {cartModal && <CartModal handleClose={handleCartModalClose} />}
       </AnimatePresence>
     </>
   );

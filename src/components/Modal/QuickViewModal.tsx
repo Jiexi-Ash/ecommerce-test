@@ -1,12 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
+
 import { motion } from "framer-motion";
 
 import Backdrop from "./Backdrop";
 import { ProductData } from "~/data";
+import ProductSize from "../Product/ProductSize";
+
+import { useAppDispatch } from "~/store/hooks";
+import { addToCart } from "~/store/slices/cartSlice";
 
 type TQuickViewModal = {
   handleClose: () => void;
@@ -14,14 +18,43 @@ type TQuickViewModal = {
 };
 
 function QuickViewModal({ handleClose, id }: TQuickViewModal) {
-  const [quantity, setQuantity] = useState(1);
-  const router = useRouter();
-  const product = ProductData.find((product) => product.id === id);
-  console.log("product", product);
+  const dispatch = useAppDispatch();
+  const [selectedSize, setSelectedSize] = useState<string>("");
+  const [itemMaxQuantity, setItemMaxQuantity] = useState<number>(1);
+  const [itemQuantity, setItemQuantity] = useState<number>(1);
 
-  const handleRoute = () => {
-    // products and category
+  const product = ProductData.find((product) => product.id === id);
+
+  const handleAddToCart = () => {
+    if (!product) return;
+    if (!selectedSize) return;
+
+    dispatch(
+      addToCart({
+        ...product,
+        quantity: itemQuantity,
+        size: selectedSize,
+      })
+    );
   };
+
+  const handleIncreaseQuantity = () => {
+    if (itemQuantity === itemMaxQuantity) return;
+
+    setItemQuantity((prev) => prev + 1);
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (itemQuantity === 1) return;
+
+    setItemQuantity((prev) => prev - 1);
+  };
+
+  useEffect(() => {
+    if (product) {
+      setItemMaxQuantity(product.quantity);
+    }
+  }, [product]);
 
   const modalVariants = {
     hidden: {
@@ -85,23 +118,7 @@ function QuickViewModal({ handleClose, id }: TQuickViewModal) {
                 R{product!.price.toFixed(2)}
               </span>
             </div>
-            <div className="mt-4 flex flex-col">
-              <div className="text-sm">Size:</div>
-              <div className="mt-4  flex space-x-2">
-                <div className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                  XS
-                </div>
-                <div className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                  S
-                </div>
-                <div className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                  M
-                </div>
-                <div className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                  L
-                </div>
-              </div>
-            </div>
+            <ProductSize size={product!.sizes} onHandleSize={setSelectedSize} />
             <div className="mt-4 flex flex-col ">
               <div className="text-sm">Color:</div>
               <div className="mt-4 flex gap-2">
@@ -117,20 +134,19 @@ function QuickViewModal({ handleClose, id }: TQuickViewModal) {
                 <button
                   type="button"
                   className={` flex h-10 w-10 items-center justify-center border border-gray-100 bg-white disabled:bg-gray-100`}
-                  disabled={quantity === 1}
-                  onClick={
-                    quantity > 1 ? () => setQuantity(quantity - 1) : undefined
-                  }
+                  disabled={itemQuantity === 1}
+                  onClick={handleDecreaseQuantity}
                 >
                   -
                 </button>
                 <span className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white">
-                  {quantity}
+                  {itemQuantity}
                 </span>
                 <button
                   type="button"
-                  className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white"
-                  onClick={() => setQuantity(quantity + 1)}
+                  className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white disabled:bg-gray-100"
+                  disabled={itemQuantity === itemMaxQuantity}
+                  onClick={handleIncreaseQuantity}
                 >
                   +
                 </button>
@@ -141,7 +157,10 @@ function QuickViewModal({ handleClose, id }: TQuickViewModal) {
               <button className="border border-black bg-white px-4 py-2 text-black transition-all duration-200 ease-out ">
                 Add to wishlist
               </button>
-              <button className="bg-black px-4 py-2 text-center text-white">
+              <button
+                className="bg-black px-4 py-2 text-center text-white"
+                onClick={handleAddToCart}
+              >
                 Add to cart
               </button>
             </div>

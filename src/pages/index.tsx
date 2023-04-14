@@ -1,28 +1,15 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Image from "next/image";
-import { EyeIcon } from "@heroicons/react/24/outline";
 
-import { api } from "~/utils/api";
 import Navbar from "~/components/Navbar";
 import Search from "~/components/Search";
-import Link from "next/link";
 
-import { useUser, SignIn, SignOutButton } from "@clerk/nextjs";
-import { SignInButton } from "@clerk/nextjs";
+// import { useUser, SignIn, SignOutButton } from "@clerk/nextjs";
+// import { SignInButton } from "@clerk/nextjs";
 import Products from "~/components/Product/Products";
 
-//  product type
-type TProduct = {
-  id?: number;
-  name: string;
-  price: number;
-  imageUrl: string;
-  category: string;
-};
-
 const Home: NextPage = () => {
-  const user = useUser();
+  // const user = useUser();
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   // const user = useUser();

@@ -3,13 +3,15 @@ import Link from "next/link";
 
 import { motion, AnimatePresence } from "framer-motion";
 
-import { useUser, SignIn, SignOutButton } from "@clerk/nextjs";
+import { useUser, SignIn } from "@clerk/nextjs";
 import { SignInButton } from "@clerk/nextjs";
+
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
-import Search from "./Search";
+
 import useCart from "~/hooks/useCart";
-import { useAppSelector } from "~/store/hooks";
+import { useAppSelector, useAppDispatch } from "~/store/hooks";
+import { setCartModal } from "~/store/slices/cartSlice";
 
 const UserButton = () => {
   useCart();
@@ -30,11 +32,10 @@ const UserButton = () => {
 };
 
 function Navbar() {
+  const dispatch = useAppDispatch();
   const cartQuantity = useAppSelector((state) => state.cart.totalQuantity);
-  console.log(cartQuantity);
-  const [isOpen, setIsOpen] = useState(false);
 
-  const user = useUser();
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     if (isOpen) {
@@ -43,6 +44,10 @@ function Navbar() {
       document.body.style.overflow = "unset";
     }
   }, [isOpen]);
+
+  const handleCartModal = () => {
+    dispatch(setCartModal(true));
+  };
 
   return (
     <header className="relative w-full border-b border-black px-6 py-6 xl:px-10">
@@ -90,14 +95,16 @@ function Navbar() {
           <ul className="hidden space-x-6 lg:flex">
             <li>{<UserButton />}</li>
             <li className="border-l border-black pl-4">
-              <Link href="/cart" className="font-medium ">
-                <div className="relative">
-                  <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black text-xs text-white">
-                    {cartQuantity}
-                  </div>
-                  <ShoppingBagIcon className="h-6 w-6" />
+              <div
+                className="relative hover:cursor-pointer"
+                onClick={handleCartModal}
+              >
+                <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-black text-xs text-white">
+                  {cartQuantity}
                 </div>
-              </Link>
+
+                <ShoppingBagIcon className="h-6 w-6" />
+              </div>
             </li>
           </ul>
 
@@ -118,7 +125,7 @@ function Navbar() {
           initial={false}
           onExitComplete={() => null}
         >
-          {isOpen && <MobileNav />}
+          {isOpen && <MobileNav quantity={cartQuantity} />}
         </AnimatePresence>
       </>
     </header>
@@ -127,7 +134,10 @@ function Navbar() {
 
 export default Navbar;
 
-export const MobileNav = () => {
+type MobileNavProps = {
+  quantity: number;
+};
+export const MobileNav = ({ quantity }: MobileNavProps) => {
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
   };
@@ -209,7 +219,7 @@ export const MobileNav = () => {
               <Link href="/cart" className="font-medium ">
                 <div className="relative">
                   <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                    {10}
+                    {quantity}
                   </div>
                   <ShoppingBagIcon className="h-6 w-6" />
                 </div>

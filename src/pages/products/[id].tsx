@@ -4,17 +4,20 @@ import Head from "next/head";
 import { useRouter } from "next/router";
 import Image from "next/image";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import Navbar from "~/components/Navbar";
-import ProductItem from "~/components/Product/ProductItem";
-import { addToCart } from "~/store/slices/cartSlice";
-import { useAppDispatch } from "~/store/hooks";
+
+import { addToCart, setCartModal } from "~/store/slices/cartSlice";
+import { useAppDispatch, useAppSelector } from "~/store/hooks";
 
 import { ProductData } from "~/data";
 import Link from "next/link";
 import ProductSize from "~/components/Product/ProductSize";
+import CartModal from "~/components/Modal/CartModal";
 
 const Product: NextPage = () => {
+  const cartModal = useAppSelector((state) => state.cart.cartModal);
+  const [selectedSize, setSelectedSize] = useState<string>("");
   const [itemMaxQuantity, setItemMaxQuantity] = useState<number>(1);
   const [itemQuantity, setItemQuantity] = useState<number>(1);
   const dispatch = useAppDispatch();
@@ -22,11 +25,14 @@ const Product: NextPage = () => {
   const id = router.query.id;
 
   const product = ProductData.find((product) => product.id === id);
-  console.log("product", product);
 
   // const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
   // const user = useUser();
+
+  const handleSize = (size: string) => {
+    setSelectedSize(size);
+  };
 
   useEffect(() => {
     if (product) {
@@ -60,18 +66,21 @@ const Product: NextPage = () => {
     },
   };
 
-  const handleClick = () => {
-    console.log("Hello");
-  };
-
   const handleAddToCart = () => {
     if (!product) return;
+    if (!selectedSize) return;
+
     dispatch(
       addToCart({
         ...product,
         quantity: itemQuantity,
+        size: selectedSize,
       })
     );
+  };
+
+  const handleCartModalClose = () => {
+    dispatch(setCartModal(false));
   };
 
   const handleIncreaseQuantity = () => {
@@ -114,7 +123,7 @@ const Product: NextPage = () => {
             >
               <motion.div
                 variants={productImageVariants}
-                className="relative flex  w-full items-center justify-center overflow-hidden bg-gray-100 lg:max-w-xl"
+                className="relative flex  w-full items-center justify-center overflow-hidden bg-gray-100 py-2 lg:max-w-xl"
               >
                 <Image
                   src={product.imageUrl}
@@ -122,6 +131,7 @@ const Product: NextPage = () => {
                   height={300}
                   alt=""
                   className="lg:hidden"
+                  style={{ width: "auto", height: "auto" }}
                 />
                 <Image
                   src={product.imageUrl}
@@ -148,7 +158,7 @@ const Product: NextPage = () => {
                   </span>
                 </div>
                 <hr className="mt-6 w-full" />
-                <ProductSize size={product.sizes} />
+                <ProductSize size={product.sizes} onHandleSize={handleSize} />
                 <div className="mt-6 flex flex-col ">
                   <div className="text-sm font-light">
                     Color: <span className="font-medium">Red</span>
@@ -201,6 +211,14 @@ const Product: NextPage = () => {
             </motion.div>
           </motion.div>
         )}
+
+        <AnimatePresence
+          mode="wait"
+          initial={false}
+          onExitComplete={() => null}
+        >
+          {cartModal && <CartModal handleClose={handleCartModalClose} />}
+        </AnimatePresence>
       </main>
     </>
   );

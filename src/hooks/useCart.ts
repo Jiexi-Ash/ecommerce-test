@@ -11,6 +11,7 @@ type cart = {
   isSale: boolean;
   salePrice: number;
   quantity: number;
+  size: string;
 };
 
 const getFromLocalStorage = () => {

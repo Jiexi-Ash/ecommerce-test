@@ -1,10 +1,18 @@
-import React from "react";
+import React, { useState } from "react";
 
 type Sizes = {
   size: string[];
+  onHandleSize: (size: string) => void;
 };
 
-function ProductSize({ size }: Sizes) {
+function ProductSize({ size, onHandleSize }: Sizes) {
+  const [selectedSize, setSelectedSize] = useState<string>("");
+
+  const handleClick = (size: string) => {
+    setSelectedSize(size);
+    onHandleSize(size);
+  };
+
   return (
     <div className="mt-6 flex flex-col">
       <div className="text-sm font-light">
@@ -14,7 +22,10 @@ function ProductSize({ size }: Sizes) {
         {size.map((size) => (
           <div
             key={size}
-            className="flex h-10 w-10 items-center justify-center border border-gray-100 bg-white"
+            onClick={() => handleClick(size)}
+            className={`flex h-10 w-10 cursor-pointer items-center justify-center border border-gray-100 bg-white duration-200 ease-in-out hover:cursor-pointer hover:bg-slate-200 ${
+              selectedSize === size ? "bg-gray-200" : ""
+            }`}
           >
             {size}
           </div>
