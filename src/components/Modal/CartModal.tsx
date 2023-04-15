@@ -62,7 +62,7 @@ function CartModal({ handleClose }: TcartModal) {
         initial="hidden"
         animate="visible"
         exit="exit"
-        className="z-50 flex h-full w-[400px] flex-col bg-white px-6 py-14 shadow-xl lg:px-14"
+        className="z-50 flex h-full  flex-col bg-white px-6 py-14 shadow-xl lg:px-14"
       >
         <div className="flex w-full items-center justify-between">
           <div className="flex space-x-2 text-2xl font-bold">
