@@ -125,7 +125,9 @@ function Navbar() {
           initial={false}
           onExitComplete={() => null}
         >
-          {isOpen && <MobileNav quantity={cartQuantity} />}
+          {isOpen && (
+            <MobileNav quantity={cartQuantity} handleClose={setIsOpen} />
+          )}
         </AnimatePresence>
       </>
     </header>
@@ -135,9 +137,11 @@ function Navbar() {
 export default Navbar;
 
 type MobileNavProps = {
+  handleClose: React.Dispatch<React.SetStateAction<boolean>>;
   quantity: number;
 };
-export const MobileNav = ({ quantity }: MobileNavProps) => {
+export const MobileNav = ({ quantity, handleClose }: MobileNavProps) => {
+  const dispatch = useAppDispatch();
   const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
   };
@@ -158,6 +162,11 @@ export const MobileNav = ({ quantity }: MobileNavProps) => {
         duration: 0.3,
       },
     },
+  };
+
+  const handleCartModal = () => {
+    dispatch(setCartModal(true));
+    handleClose(false);
   };
 
   return (
@@ -216,14 +225,15 @@ export const MobileNav = ({ quantity }: MobileNavProps) => {
               <UserButton />
             </li>
             <li className="border-slate-50">
-              <Link href="/cart" className="font-medium ">
-                <div className="relative">
-                  <div className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white">
-                    {quantity}
-                  </div>
-                  <ShoppingBagIcon className="h-6 w-6" />
+              <div className="relative">
+                <div
+                  className="absolute -top-1 -right-1 flex h-4 w-4 items-center justify-center rounded-full bg-red-500 text-xs text-white"
+                  onClick={handleCartModal}
+                >
+                  {quantity}
                 </div>
-              </Link>
+                <ShoppingBagIcon className="h-6 w-6" />
+              </div>
             </li>
           </ul>
         </div>

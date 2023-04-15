@@ -40,7 +40,7 @@ function Products() {
 
   return (
     <>
-      <div className="my-4 grid grid-cols-1 gap-y-6 md:grid-cols-2 md:gap-x-6 md:px-6 lg:grid-cols-3 xl:grid-cols-4 xl:px-10">
+      <div className="my-4 grid grid-cols-1 gap-y-6 px-6 md:grid-cols-2 md:gap-x-6 md:px-6 lg:grid-cols-3 xl:grid-cols-4 xl:px-10">
         {ProductData.map((product) => (
           <Product
             key={product.id}

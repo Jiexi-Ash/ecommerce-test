@@ -50,7 +50,7 @@ function ProductItem({
   return (
     <div className="flex h-full w-full flex-col items-start justify-center">
       <motion.div
-        className="group relative flex w-full flex-col items-center justify-center bg-gray-100 md:h-[600px] md:rounded-lg"
+        className="group relative flex w-full flex-col items-center justify-center rounded-lg bg-gray-100 md:h-[600px]"
         variants={productVariants}
         initial="hidden"
         animate="visible"
