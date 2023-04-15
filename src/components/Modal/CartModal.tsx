@@ -6,7 +6,11 @@ import Link from "next/link";
 
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
-import { removeItem } from "~/store/slices/cartSlice";
+import {
+  removeItem,
+  increaseProductQuantity,
+  decreaseProductQuantity,
+} from "~/store/slices/cartSlice";
 
 type TcartModal = {
   handleClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -36,6 +40,14 @@ function CartModal({ handleClose }: TcartModal) {
 
   const handleRemoveItem = (id: string) => {
     dispatch(removeItem(id));
+  };
+
+  const handleIncreaseQuantity = (id: string) => {
+    dispatch(increaseProductQuantity(id));
+  };
+
+  const handleDecreaseQuantity = (id: string) => {
+    dispatch(decreaseProductQuantity(id));
   };
 
   return (
@@ -98,11 +110,17 @@ function CartModal({ handleClose }: TcartModal) {
 
                 {/* buttons */}
                 <div className="mt-6 flex">
-                  <button className="bg-gray-100 px-4 py-2 hover:bg-gray-200">
+                  <button
+                    className="bg-gray-100 px-4 py-2 hover:bg-gray-200"
+                    onClick={() => handleDecreaseQuantity(item.id)}
+                  >
                     -
                   </button>
                   <span className="bg-gray-100 px-4 py-2">{item.quantity}</span>
-                  <button className="bg-gray-100 px-4 py-2 hover:cursor-pointer hover:bg-gray-200">
+                  <button
+                    className="bg-gray-100 px-4 py-2 hover:cursor-pointer hover:bg-gray-200"
+                    onClick={() => handleIncreaseQuantity(item.id)}
+                  >
                     +
                   </button>
                 </div>

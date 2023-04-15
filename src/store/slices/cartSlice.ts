@@ -78,10 +78,52 @@ const cartSlice = createSlice({
     setCartModal: (state, action: PayloadAction<boolean>) => {
       state.cartModal = action.payload;
     },
+    increaseProductQuantity: (state, action: PayloadAction<string>) => {
+      const product = state.cart.find((item) => item.id === action.payload);
+
+      if (!product) return;
+
+      const newCart = state.cart.map((item) => {
+        if (item.id === product.id) {
+          item.quantity += 1;
+          state.totalPrice += item.price;
+          state.totalQuantity += 1;
+        }
+        return item;
+      });
+
+      state.cart = newCart;
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+    },
+
+    decreaseProductQuantity: (state, action: PayloadAction<string>) => {
+      const product = state.cart.find((item) => item.id === action.payload);
+
+      if (!product) return;
+
+      const newCart = state.cart.map((item) => {
+        if (item.id === product.id) {
+          item.quantity -= 1;
+          state.totalPrice -= item.price;
+          state.totalQuantity -= 1;
+        }
+
+        return item;
+      });
+
+      state.cart = newCart;
+      localStorage.setItem("cart", JSON.stringify(state.cart));
+    },
   },
 });
 
-export const { addToCart, setCart, setCartModal, removeItem } =
-  cartSlice.actions;
+export const {
+  addToCart,
+  setCart,
+  setCartModal,
+  removeItem,
+  increaseProductQuantity,
+  decreaseProductQuantity,
+} = cartSlice.actions;
 
 export default cartSlice.reducer;
