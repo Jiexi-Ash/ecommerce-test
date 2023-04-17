@@ -12,7 +12,7 @@ import {
 import { motion } from "framer-motion";
 import { AnimatePresence } from "framer-motion";
 
-import AdminNav from "~/components/admin/AdminNav";
+import AdminNav from "~/components/admin/SideNav";
 import AdminSearch from "~/components/admin/AdminSearch";
 import AddProductModal from "~/components/admin/AddProductModal";
 
