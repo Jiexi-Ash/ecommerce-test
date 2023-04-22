@@ -6,11 +6,14 @@ import Link from "next/link";
 
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
+import { api } from "~/utils/api";
+
 import {
   removeItem,
   increaseProductQuantity,
   decreaseProductQuantity,
 } from "~/store/slices/cartSlice";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 type TcartModal = {
   handleClose: React.Dispatch<React.SetStateAction<boolean>>;
@@ -21,6 +24,18 @@ function CartModal({ handleClose }: TcartModal) {
   const cartQuantity = useAppSelector((state) => state.cart.totalQuantity);
   const cartItems = useAppSelector((state) => state.cart.cart);
   const totalPrice = useAppSelector((state) => state.cart.totalPrice);
+
+  const { mutateAsync: createOrder } = api.payments.createOrder.useMutation({
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
+
+  const { mutateAsync: approveOrder } = api.payments.approveOrder.useMutation({
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
 
   const containerVariants = {
     hidden: { width: 0 },
@@ -50,6 +65,32 @@ function CartModal({ handleClose }: TcartModal) {
     dispatch(decreaseProductQuantity(id));
   };
 
+  const handleCreateOrder = async () => {
+    console.log(totalPrice, "totalPrice");
+    const purchase_units = [
+      {
+        amount: {
+          currency_code: "USD",
+          value: totalPrice.toString(),
+        },
+      },
+    ];
+
+    const order = await createOrder({ purchase_units });
+
+    if (order) {
+      console.log(order);
+      return order;
+    } else {
+      console.log("error");
+      return "";
+    }
+  };
+
+  const handleApproveOrder = async (order_id: string) => {
+    await approveOrder({ order_id });
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -76,7 +117,7 @@ function CartModal({ handleClose }: TcartModal) {
           />
         </div>
 
-        <div className="mt-6 flex h-[660px] flex-col  overflow-auto border-t-8 border-black">
+        <div className="mt-6 flex max-h-[660px] flex-col  overflow-auto border-t-8 border-black">
           {cartItems.map((item) => (
             <div className="mt-4  flex justify-start space-x-6 " key={item.id}>
               <div className="relative flex items-center justify-center bg-gray-100">
@@ -141,11 +182,19 @@ function CartModal({ handleClose }: TcartModal) {
             <p className="text-xl font-bold">Subtotal</p>
             <p className="text-lg ">R{totalPrice.toFixed(2)}</p>
           </div>
-          <div className="mt-6 flex w-full space-x-2">
-            <button className="w-2/4 bg-black py-4 text-white">
-              View cart
-            </button>
-            <button className="w-2/4 bg-black py-4 text-white">Checkout</button>
+          <div className="mt-6 flex w-full flex-col space-x-2">
+            <PayPalScriptProvider
+              options={{
+                "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
+              }}
+            >
+              <PayPalButtons
+                createOrder={handleCreateOrder}
+                onApprove={async (data, actions) => {
+                  await handleApproveOrder(data.orderID);
+                }}
+              />
+            </PayPalScriptProvider>
           </div>
         </div>
       </motion.div>
