@@ -10,7 +10,11 @@ import { ProductData } from "~/data";
 import ProductSize from "../Product/ProductSize";
 
 import { useAppDispatch } from "~/store/hooks";
-import { addToCart } from "~/store/slices/cartSlice";
+import {
+  addToCart,
+  increaseProductQuantity,
+  decreaseProductQuantity,
+} from "~/store/slices/cartSlice";
 
 type TQuickViewModal = {
   handleClose: () => void;

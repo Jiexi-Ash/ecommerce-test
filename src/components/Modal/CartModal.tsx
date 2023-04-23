@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 import { useAppSelector, useAppDispatch } from "~/store/hooks";
 import Image from "next/image";
@@ -12,6 +12,8 @@ import {
   removeItem,
   increaseProductQuantity,
   decreaseProductQuantity,
+  clearCart,
+  setCartModal,
 } from "~/store/slices/cartSlice";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -20,6 +22,7 @@ type TcartModal = {
 };
 
 function CartModal({ handleClose }: TcartModal) {
+  const [checkoutSuccess, setCheckoutSuccess] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const cartQuantity = useAppSelector((state) => state.cart.totalQuantity);
   const cartItems = useAppSelector((state) => state.cart.cart);
@@ -34,6 +37,9 @@ function CartModal({ handleClose }: TcartModal) {
   const { mutateAsync: approveOrder } = api.payments.approveOrder.useMutation({
     onSuccess: (data) => {
       console.log(data);
+      handleClose(false);
+      dispatch(clearCart());
+      setCheckoutSuccess(true);
     },
   });
 
@@ -177,26 +183,30 @@ function CartModal({ handleClose }: TcartModal) {
             </div>
           ))}
         </div>
-        <div className="mt-10 flex flex-col">
-          <div className="flex w-full justify-between">
-            <p className="text-xl font-bold">Subtotal</p>
-            <p className="text-lg ">R{totalPrice.toFixed(2)}</p>
-          </div>
-          <div className="mt-6 flex w-full flex-col space-x-2">
-            <PayPalScriptProvider
-              options={{
-                "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
-              }}
-            >
-              <PayPalButtons
-                createOrder={handleCreateOrder}
-                onApprove={async (data, actions) => {
-                  await handleApproveOrder(data.orderID);
+        {cartItems.length >= 1 ? (
+          <div className="mt-10 flex flex-col">
+            <div className="flex w-full justify-between">
+              <p className="text-xl font-bold">Subtotal</p>
+              <p className="text-lg ">R{totalPrice.toFixed(2)}</p>
+            </div>
+            <div className="mt-6 flex w-full flex-col space-x-2">
+              <PayPalScriptProvider
+                options={{
+                  "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
                 }}
-              />
-            </PayPalScriptProvider>
+              >
+                <PayPalButtons
+                  createOrder={handleCreateOrder}
+                  onApprove={async (data, actions) => {
+                    await handleApproveOrder(data.orderID);
+                  }}
+                />
+              </PayPalScriptProvider>
+            </div>
           </div>
-        </div>
+        ) : (
+          <p className="mt-6 text-center text-xl font-medium">Cart Empty</p>
+        )}
       </motion.div>
     </motion.div>
   );

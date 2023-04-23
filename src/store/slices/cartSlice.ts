@@ -37,7 +37,8 @@ const cartSlice = createSlice({
         return;
       } else {
         state.cart.push(action.payload);
-        state.totalPrice += action.payload.price;
+        // calculate total price based on the quantity
+        state.totalPrice += action.payload.price * action.payload.quantity;
         state.totalQuantity += action.payload.quantity;
 
         localStorage.setItem("cart", JSON.stringify(state.cart));
@@ -114,6 +115,13 @@ const cartSlice = createSlice({
       state.cart = newCart;
       localStorage.setItem("cart", JSON.stringify(state.cart));
     },
+
+    clearCart: (state) => {
+      state.cart = [];
+      state.totalPrice = 0;
+      state.totalQuantity = 0;
+      localStorage.removeItem("cart");
+    },
   },
 });
 
@@ -124,6 +132,7 @@ export const {
   removeItem,
   increaseProductQuantity,
   decreaseProductQuantity,
+  clearCart,
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
