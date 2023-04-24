@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
 
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -17,9 +18,25 @@ const UserButton = () => {
   useCart();
   const user = useUser();
 
-  const username = user.user?.username;
-
   if (!user) return null;
+  const username = user.user?.username;
+  const avatar = user.user?.profileImageUrl;
+
+  if (avatar) {
+    return (
+      <div className="flex cursor-pointer items-center space-x-2">
+        <Image
+          src={avatar}
+          alt="avatar"
+          className=" rounded-full object-cover"
+          width={24}
+          height={24}
+        />
+        <div>{username}</div>
+      </div>
+    );
+  }
+
   return (
     <>
       <div>

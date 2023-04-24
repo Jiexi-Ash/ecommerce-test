@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useAppSelector, useAppDispatch } from "~/store/hooks";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
@@ -22,6 +23,7 @@ type TcartModal = {
 };
 
 function CartModal({ handleClose }: TcartModal) {
+  const router = useRouter();
   const [checkoutSuccess, setCheckoutSuccess] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const cartQuantity = useAppSelector((state) => state.cart.totalQuantity);
