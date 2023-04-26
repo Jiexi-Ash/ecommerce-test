@@ -43,6 +43,7 @@ export default async function handler(
     evt = wh.verify(payload, headers) as Event;
   } catch (e) {
     return res.status(400).json({
+      message: "verification failed",
       error: e,
     });
   }
@@ -67,23 +68,31 @@ export default async function handler(
 
     const { email_address } = emailObject;
 
-    const existingEmail = await prisma.profile.findFirst({
-      where: {
-        email: email_address,
-      },
-    });
+    try {
+      const existingEmail = await prisma.profile.findFirst({
+        where: {
+          email: email_address,
+        },
+      });
 
-    if (existingEmail) {
+      if (existingEmail) {
+        return res.status(400).json({
+          error: "Email already exists",
+        });
+      }
+      if (!existingEmail) {
+        console.log(`Received ${eventType} event for user ${id}`);
+        res.status(200).json({
+          message: "OK",
+        });
+      }
+    } catch (e) {
       return res.status(400).json({
-        error: "Email already exists",
+        error: e,
+        message: "Error checking for existing email",
       });
     }
   }
-
-  console.log(`Received ${eventType} event for user ${id}`);
-  res.status(200).json({
-    message: "OK",
-  });
 }
 
 type NextApiRequestWithSvixRequiredHeaders = NextApiRequest & {
