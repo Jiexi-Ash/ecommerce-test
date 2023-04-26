@@ -60,31 +60,16 @@ export default async function handler(
       return email.id === primary_email_address_id;
     });
 
-    if (!emailObject) {
-      return res.status(400).json({
-        error: "Primary email address not found",
-      });
-    }
+    // get email address
+    const email = emailObject?.email_address;
 
-    const { email_address } = emailObject;
-
-    const existingEmail = await prisma.profile.findUnique({
-      where: {
-        email: email_address,
-      },
+    res.status(200).json({
+      message: "user created",
+      id,
+      email,
+      first_name,
+      last_name,
     });
-
-    if (existingEmail) {
-      return res.status(400).json({
-        error: "Email already exists",
-      });
-    }
-    if (!existingEmail) {
-      console.log(`Received ${eventType} event for user ${id}`);
-      res.status(200).json({
-        message: "OK",
-      });
-    }
   }
 }
 
