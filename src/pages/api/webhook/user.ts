@@ -31,7 +31,7 @@ interface UserInterface extends Omit<User, UnwantedKeys> {
 
 const webhookSecret: string = process.env.WEBHOOK_SECRET || "";
 
-export default function handler(
+export default async function handler(
   req: NextApiRequestWithSvixRequiredHeaders,
   res: NextApiResponse
 ) {
@@ -62,6 +62,38 @@ export default function handler(
 
     // get email address
     const email = emailObject?.email_address;
+
+    try {
+      const emailExists = await prisma.profile.findUnique({
+        where: {
+          email: email,
+        },
+      });
+
+      if (emailExists) {
+        return res.status(400).json({
+          email: email,
+          message: "email already exists",
+        });
+      }
+
+      await prisma.profile.create({
+        data: {
+          userId: id,
+          email: email!,
+          firstName: first_name,
+          lastName: last_name,
+        },
+      });
+
+      return res.status(200).json({
+        message: "user created",
+        id,
+        email,
+        first_name,
+        last_name,
+      });
+    } catch (e) {}
 
     res.status(200).json({
       message: "user created",
