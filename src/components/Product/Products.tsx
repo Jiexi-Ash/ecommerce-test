@@ -28,8 +28,6 @@ function Products() {
     dispatch(setCartModal(false));
   };
 
-  // stop body scroll when modal is open
-
   useEffect(() => {
     if (modalOpen || cartModal) {
       document.body.style.overflow = "hidden";

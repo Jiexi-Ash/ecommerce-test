@@ -4,20 +4,10 @@ import Head from "next/head";
 import Navbar from "~/components/Navbar";
 import Search from "~/components/Search";
 
-// import { useUser, SignIn, SignOutButton } from "@clerk/nextjs";
-// import { SignInButton } from "@clerk/nextjs";
-
 import Products from "~/components/Product/Products";
 
-import { api } from "~/utils/api";
-
 const Home: NextPage = () => {
-  // const user = useUser();
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
 
-  // const { data } = api.products.getAll.useQuery();
-
-  // const user = useUser();
 
   return (
     <>

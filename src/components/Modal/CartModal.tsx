@@ -14,7 +14,6 @@ import {
   increaseProductQuantity,
   decreaseProductQuantity,
   clearCart,
-  setCartModal,
 } from "~/store/slices/cartSlice";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
@@ -23,7 +22,6 @@ type TcartModal = {
 };
 
 function CartModal({ handleClose }: TcartModal) {
-  const router = useRouter();
   const [checkoutSuccess, setCheckoutSuccess] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const cartQuantity = useAppSelector((state) => state.cart.totalQuantity);

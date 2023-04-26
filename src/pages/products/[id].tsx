@@ -26,10 +26,6 @@ const Product: NextPage = () => {
 
   const product = ProductData.find((product) => product.id === id);
 
-  // const hello = api.example.hello.useQuery({ text: "from tRPC" });
-
-  // const user = useUser();
-
   const handleSize = (size: string) => {
     setSelectedSize(size);
   };
@@ -110,12 +106,6 @@ const Product: NextPage = () => {
             initial="hidden"
             animate="visible"
           >
-            {/* <motion.div
-              variants={productImageVariants}
-              className="relative flex h-[450px] w-full items-center justify-center overflow-hidden bg-gray-100"
-            >
-              <Image src={product.imageUrl} width={300} height={300} alt="" />
-            </motion.div> */}
             <motion.div
               className="relative flex w-full flex-col overflow-hidden lg:flex-row"
               animate="visible"
@@ -145,7 +135,6 @@ const Product: NextPage = () => {
                 <div className="flex w-full flex-col space-y-2">
                   <h1 className="text-xl font-bold">{product.name}</h1>
 
-                  {/* link to category */}
                   <Link
                     className="text-sm  text-gray-400"
                     href={`/products/${product.category}`}

@@ -188,13 +188,6 @@ function QuickViewModal({ handleClose, id }: TQuickViewModal) {
             </motion.div>
           </div>
         </div>
-
-        {/* <button
-          onClick={handleClose}
-          className="rounded-md bg-black px-4 py-2 text-white"
-        >
-          Close
-        </button> */}
       </motion.div>
     </Backdrop>
   );
