@@ -34,6 +34,9 @@ function CartModal({ handleClose }: TcartModal) {
     onSuccess: (data) => {
       console.log(data);
     },
+    onError: (error) => {
+      alert(error.message);
+    },
   });
 
   const { mutateAsync: approveOrder } = api.payments.approveOrder.useMutation({

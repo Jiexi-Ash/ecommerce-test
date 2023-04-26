@@ -69,10 +69,6 @@ export const paymentRouter = createTRPCRouter({
       const { purchase_units } = input;
       const accessToken = await generateAccessToken();
 
-      if (!userId) {
-        throw new Error("User not logged in");
-      }
-
       const data = JSON.stringify({
         intent: "capture",
         purchase_units,
@@ -97,6 +93,7 @@ export const paymentRouter = createTRPCRouter({
 
         return data.id;
       } catch (error) {
+        console.log("Error creating order");
         console.log(error);
         throw new Error("Error creating order");
       }
@@ -115,10 +112,6 @@ export const paymentRouter = createTRPCRouter({
 
       const userID = ctx.auth.userId;
 
-      if (!userID) {
-        throw new Error("User not logged in");
-      }
-
       try {
         const response = await axios.post(
           baseURL! + "/v2/checkout/orders/" + order_id + "/capture",
@@ -135,7 +128,7 @@ export const paymentRouter = createTRPCRouter({
 
         return data;
       } catch (error) {
-        console.log(error);
+        console.log("not logged in");
         throw new Error("Error approving order");
       }
     }),

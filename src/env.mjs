@@ -10,6 +10,7 @@ const server = z.object({
   PAYPAL_CLIENT_ID: z.string().min(1),
   PAYPAL_CLIENT_SECRET: z.string().min(1),
   PAYPAL_URL: z.string().min(1),
+  WEBHOOK_SECRET: z.string().min(1),
 });
 
 /**
@@ -34,6 +35,7 @@ const processEnv = {
   PAYPAL_CLIENT_SECRET: process.env.PAYPAL_CLIENT_SECRET,
   PAYPAL_URL: process.env.PAYPAL_URL,
   NEXT_PUBLIC_PAYPAL_CLIENT_ID: process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID,
+  WEBHOOK_SECRET: process.env.WEBHOOK_SECRET,
   // NEXT_PUBLIC_CLIENTVAR: process.env.NEXT_PUBLIC_CLIENTVAR,
 };
 

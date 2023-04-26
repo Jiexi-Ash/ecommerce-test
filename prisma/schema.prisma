@@ -38,3 +38,23 @@ model Size {
 
     @@index([productId])
 }
+
+// one to one table for role and user
+
+enum Role {
+    ADMIN
+    USER
+}
+
+model Profile {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    userId    String
+    email     String   @unique
+    role      Role     @default(USER)
+    firstName String
+    lastName  String
+
+    @@index([userId])
+}

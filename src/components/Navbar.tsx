@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 
 import { useUser, SignIn } from "@clerk/nextjs";
 import { SignInButton } from "@clerk/nextjs";
+import { useClerk } from "@clerk/nextjs";
 
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/solid";
 import { ShoppingBagIcon } from "@heroicons/react/24/outline";
@@ -14,7 +15,16 @@ import useCart from "~/hooks/useCart";
 import { useAppSelector, useAppDispatch } from "~/store/hooks";
 import { setCartModal } from "~/store/slices/cartSlice";
 
-const UserButton = () => {
+import {
+  ArrowRightOnRectangleIcon,
+  Cog6ToothIcon,
+} from "@heroicons/react/24/solid";
+
+type UserButtonProps = {
+  handleClose?: () => void;
+};
+
+const UserButton = ({ handleClose }: UserButtonProps) => {
   useCart();
   const user = useUser();
 
@@ -24,7 +34,10 @@ const UserButton = () => {
 
   if (avatar) {
     return (
-      <div className="flex cursor-pointer items-center space-x-2">
+      <div
+        className="flex cursor-pointer items-center space-x-2"
+        onClick={handleClose}
+      >
         <Image
           src={avatar}
           alt="avatar"
@@ -49,10 +62,17 @@ const UserButton = () => {
 };
 
 function Navbar() {
+  const [options, setOptions] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const cartQuantity = useAppSelector((state) => state.cart.totalQuantity);
 
   const [isOpen, setIsOpen] = useState(false);
+  const user = useUser();
+  const { signOut } = useClerk();
+
+  const avatar = user.user?.profileImageUrl;
+  const firstName = user.user?.firstName;
+  const lastName = user.user?.lastName;
 
   useEffect(() => {
     if (isOpen) {
@@ -64,6 +84,17 @@ function Navbar() {
 
   const handleCartModal = () => {
     dispatch(setCartModal(true));
+  };
+
+  const handleOptions = () => {
+    setOptions(!options);
+  };
+
+  // function with return type of promise void
+  const handleSignOut = async (): Promise<void> => {
+    await signOut().then(() => {
+      setOptions(false);
+    });
   };
 
   return (
@@ -105,12 +136,50 @@ function Navbar() {
             </li>
           </ul>
 
+          {options && (
+            <div className="absolute right-28 top-16 z-50 w-80  transform rounded-sm  border border-gray-200 bg-white py-6 shadow-lg">
+              <div className="flex flex-col items-center justify-center space-y-4">
+                <div className="flex w-full items-center space-x-4  px-4">
+                  <Image
+                    src={avatar!}
+                    alt="avatar"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                  <div className="flex flex-col">
+                    <p className="flex space-x-1">
+                      <span className="capitalize">{firstName}</span>
+                      <span>{lastName}</span>
+                    </p>
+                  </div>
+                </div>
+                <div className="flex w-full items-center space-x-8 px-6 py-4 hover:cursor-pointer hover:bg-gray-200">
+                  <div className="rounded-full">
+                    <Cog6ToothIcon className="h-5 w-5 text-gray-300" />
+                  </div>
+                  <p className="text-left text-sm">Manage Account</p>
+                </div>
+                <div
+                  className="flex w-full items-center space-x-8   px-6 py-4 hover:cursor-pointer hover:bg-gray-200"
+                  // eslint-disable-next-line @typescript-eslint/no-misused-promises
+                  onClick={() => handleSignOut()}
+                >
+                  <div className="rounded-full">
+                    <ArrowRightOnRectangleIcon className="h-5 w-5 text-gray-300" />
+                  </div>
+                  <p className="text-left text-sm">Sign Out</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           <Link href="/">
             <h1 className="text-lg font-medium uppercase">Flee-mark</h1>
           </Link>
 
           <ul className="hidden space-x-6 lg:flex">
-            <li>{<UserButton />}</li>
+            <li>{<UserButton handleClose={handleOptions} />}</li>
             <li className="border-l border-black pl-4">
               <div
                 className="relative hover:cursor-pointer"

@@ -17,17 +17,23 @@ function SideNav() {
 
         <div className="mt-6 flex h-full flex-col justify-between">
           <ul className="flex flex-col space-y-4">
-            <li className="flex items-center space-x-2 py-2 px-6 duration-200 ease-in-out hover:cursor-pointer hover:bg-black hover:text-white">
-              <Squares2X2Icon className="h-5 w-5" />
-              <Link href="/admin">Dashboard</Link>
+            <li className="flex items-center space-x-8 py-2 px-6 duration-200 ease-in-out hover:cursor-pointer hover:bg-black hover:text-white">
+              <Squares2X2Icon className="h-6 w-6" />
+              <Link href="/admin" className="text-lg">
+                Dashboard
+              </Link>
             </li>
-            <li className="flex items-center space-x-2 py-2 px-6 duration-200 ease-in-out hover:cursor-pointer hover:bg-black hover:text-white">
-              <ArchiveBoxIcon className="h-5 w-5" />
-              <Link href="/admin/products">Product</Link>
+            <li className="flex items-center space-x-8 py-2 px-6 duration-200 ease-in-out hover:cursor-pointer hover:bg-black hover:text-white">
+              <ArchiveBoxIcon className="h-6 w-6" />
+              <Link href="/admin/products" className="text-lg ">
+                Product
+              </Link>
             </li>
-            <li className="flex items-center space-x-2 py-2 px-6 duration-200 ease-in-out hover:cursor-pointer hover:bg-black hover:text-white">
-              <BookmarkIcon className="h-5 w-5" />
-              <Link href="/orders">Orders</Link>
+            <li className="flex items-center space-x-8 py-2 px-6 duration-200 ease-in-out hover:cursor-pointer hover:bg-black hover:text-white">
+              <BookmarkIcon className="h-6 w-6" />
+              <Link href="/orders" className="text-lg">
+                Orders
+              </Link>
             </li>
           </ul>
 
