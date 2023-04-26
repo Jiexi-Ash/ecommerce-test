@@ -73,6 +73,12 @@ export default async function handler(
       //   },
       // });
 
+      const existingUser = await prisma.profile.findUnique({
+        where: {
+          email: email_address,
+        },
+      });
+
       // // If a user with the same email address already exists, the code returns a 200 response.
       // if (existingUser) {
       //   return res.status(200).json({});
@@ -88,6 +94,7 @@ export default async function handler(
       //   },
       // });'
       res.status(200).json({
+        existingUser: existingUser || "no user",
         id: id,
         email: email_address,
         firstName: first_name,
@@ -99,7 +106,7 @@ export default async function handler(
     } catch (error) {
       console.error(error);
       return res.status(500).json({
-        spot: "user.created",
+        spot: "user error",
         error: error,
       });
     }
