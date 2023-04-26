@@ -93,6 +93,7 @@ export default async function handler(
     } catch (error) {
       console.error(error);
       return res.status(500).json({
+        spot: "user.created",
         error: error,
       });
     }
