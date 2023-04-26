@@ -68,26 +68,32 @@ export default async function handler(
     const { email_address } = emailObject;
 
     try {
-      const existingUser = await prisma.profile.findUnique({
-        where: {
-          email: email_address,
-        },
+      //   where: {
+      //     email: email_address,
+      //   },
+      // });
+
+      // // If a user with the same email address already exists, the code returns a 200 response.
+      // if (existingUser) {
+      //   return res.status(200).json({});
+      // }
+
+      // // If a user with the same email address does not exist, the code creates a new user in the database.
+      // await prisma.profile.create({
+      //   data: {
+      //     userId: id,
+      //     email: email_address,
+      //     firstName: first_name,
+      //     lastName: last_name,
+      //   },
+      // });'
+      res.status(200).json({
+        id: id,
+        email: email_address,
+        firstName: first_name,
+        lastName: last_name,
       });
 
-      // If a user with the same email address already exists, the code returns a 200 response.
-      if (existingUser) {
-        return res.status(200).json({});
-      }
-
-      // If a user with the same email address does not exist, the code creates a new user in the database.
-      await prisma.profile.create({
-        data: {
-          userId: id,
-          email: email_address,
-          firstName: first_name,
-          lastName: last_name,
-        },
-      });
       console.log(`Created user ${id}`);
       return res.status(200).json({});
     } catch (error) {
