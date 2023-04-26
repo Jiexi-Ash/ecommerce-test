@@ -43,7 +43,7 @@ export default async function handler(
     evt = wh.verify(payload, headers) as Event;
   } catch (e) {
     return res.status(400).json({
-      error: e.message,
+      error: e,
     });
   }
   const { id } = evt.data;
