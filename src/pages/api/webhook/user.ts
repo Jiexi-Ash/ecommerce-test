@@ -31,7 +31,7 @@ interface UserInterface extends Omit<User, UnwantedKeys> {
 
 const webhookSecret: string = process.env.WEBHOOK_SECRET || "";
 
-export default async function handler(
+export default function handler(
   req: NextApiRequestWithSvixRequiredHeaders,
   res: NextApiResponse
 ) {
