@@ -42,9 +42,8 @@ export default async function handler(
   try {
     evt = wh.verify(payload, headers) as Event;
   } catch (e) {
-    console.error(e);
     return res.status(400).json({
-      error: "Invalid webhook signature",
+      error: e.message,
     });
   }
   const { id } = evt.data;
@@ -61,8 +60,9 @@ export default async function handler(
     });
 
     if (!emailObject) {
-      
-      return res.status(400).json({});
+      return res.status(400).json({
+        error: "Primary email address not found",
+      });
     }
 
     const { email_address } = emailObject;
@@ -94,7 +94,7 @@ export default async function handler(
     } catch (error) {
       console.error(error);
       return res.status(500).json({
-        error: "Internal server error",
+        error: error,
       });
     }
   }
