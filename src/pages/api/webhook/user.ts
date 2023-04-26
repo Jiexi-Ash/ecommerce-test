@@ -41,7 +41,8 @@ export default async function handler(
   let evt: Event | null = null;
   try {
     evt = wh.verify(payload, headers) as Event;
-  } catch (_) {
+  } catch (e) {
+    console.error(e);
     return res.status(400).json({
       error: "Invalid webhook signature",
     });
@@ -60,6 +61,7 @@ export default async function handler(
     });
 
     if (!emailObject) {
+      
       return res.status(400).json({});
     }
 
