@@ -66,8 +66,21 @@ export default async function handler(
     }
 
     const { email_address } = emailObject;
+
+    const existingEmail = await prisma.profile.findFirst({
+      where: {
+        email: email_address,
+      },
+    });
+
+    if (existingEmail) {
+      return res.status(400).json({
+        error: "Email already exists",
+      });
+    }
   }
 
+  console.log(`Received ${eventType} event for user ${id}`);
   res.status(200).json({
     message: "OK",
   });
