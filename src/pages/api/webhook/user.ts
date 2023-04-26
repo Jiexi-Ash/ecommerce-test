@@ -68,28 +68,21 @@ export default async function handler(
 
     const { email_address } = emailObject;
 
-    try {
-      const existingEmail = await prisma.profile.findFirst({
-        where: {
-          email: email_address,
-        },
-      });
+    const existingEmail = await prisma.profile.findUnique({
+      where: {
+        email: email_address,
+      },
+    });
 
-      if (existingEmail) {
-        return res.status(400).json({
-          error: "Email already exists",
-        });
-      }
-      if (!existingEmail) {
-        console.log(`Received ${eventType} event for user ${id}`);
-        res.status(200).json({
-          message: "OK",
-        });
-      }
-    } catch (e) {
+    if (existingEmail) {
       return res.status(400).json({
-        error: e,
-        message: "Error checking for existing email",
+        error: "Email already exists",
+      });
+    }
+    if (!existingEmail) {
+      console.log(`Received ${eventType} event for user ${id}`);
+      res.status(200).json({
+        message: "OK",
       });
     }
   }
