@@ -42,7 +42,9 @@ export default async function handler(
   try {
     evt = wh.verify(payload, headers) as Event;
   } catch (_) {
-    return res.status(400).json({});
+    return res.status(400).json({
+      error: "Invalid webhook signature",
+    });
   }
   const { id } = evt.data;
   // Handle the webhook
