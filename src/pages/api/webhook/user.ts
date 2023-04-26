@@ -76,7 +76,6 @@ export default async function handler(
 
       // If a user with the same email address already exists, the code returns a 200 response.
       if (existingUser) {
-        console.log(`User ${id} already exists`);
         return res.status(200).json({});
       }
 

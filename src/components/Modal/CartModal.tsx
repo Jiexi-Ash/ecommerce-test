@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { useAppSelector, useAppDispatch } from "~/store/hooks";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/router";
 
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
