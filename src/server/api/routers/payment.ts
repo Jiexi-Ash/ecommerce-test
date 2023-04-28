@@ -66,6 +66,7 @@ export const paymentRouter = createTRPCRouter({
     )
     .mutation(async ({ ctx, input }) => {
       const userId = ctx.auth.userId;
+      console.log(userId);
       const { purchase_units } = input;
       const accessToken = await generateAccessToken();
 

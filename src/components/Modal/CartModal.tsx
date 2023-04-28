@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useAppSelector, useAppDispatch } from "~/store/hooks";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 import { XMarkIcon } from "@heroicons/react/24/solid";
 
@@ -15,12 +16,15 @@ import {
   clearCart,
 } from "~/store/slices/cartSlice";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import { useUser } from "@clerk/nextjs";
 
 type TcartModal = {
   handleClose: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 function CartModal({ handleClose }: TcartModal) {
+  const router = useRouter();
+  const user = useUser();
   const [checkoutSuccess, setCheckoutSuccess] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const cartQuantity = useAppSelector((state) => state.cart.totalQuantity);
@@ -31,8 +35,10 @@ function CartModal({ handleClose }: TcartModal) {
     onSuccess: (data) => {
       console.log(data);
     },
-    onError: (error) => {
-      alert(error.message);
+    onError: async (error) => {
+      if (error.message === "Not authenticated") {
+        await router.push("/sign-up");
+      }
     },
   });
 
@@ -97,6 +103,12 @@ function CartModal({ handleClose }: TcartModal) {
 
   const handleApproveOrder = async (order_id: string) => {
     await approveOrder({ order_id });
+  };
+
+  const handleError = (error: any) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
+    const errorMessage = error.message;
+    console.log("error", errorMessage);
   };
 
   return (
@@ -192,18 +204,38 @@ function CartModal({ handleClose }: TcartModal) {
               <p className="text-lg ">R{totalPrice.toFixed(2)}</p>
             </div>
             <div className="mt-6 flex w-full flex-col space-x-2">
-              <PayPalScriptProvider
-                options={{
-                  "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
-                }}
-              >
-                <PayPalButtons
-                  createOrder={handleCreateOrder}
-                  onApprove={async (data, actions) => {
-                    await handleApproveOrder(data.orderID);
+              {user.isSignedIn ? (
+                <PayPalScriptProvider
+                  options={{
+                    "client-id": process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID!,
                   }}
-                />
-              </PayPalScriptProvider>
+                >
+                  <PayPalButtons
+                    createOrder={handleCreateOrder}
+                    onApprove={async (data, actions) => {
+                      await handleApproveOrder(data.orderID);
+                    }}
+                    onError={(error) => {
+                      handleError(error);
+                    }}
+                    onCancel={(data) => {
+                      console.log(data);
+                    }}
+                  />
+                </PayPalScriptProvider>
+              ) : (
+                <div className="mt-6 flex flex-col items-center">
+                  <p className="font-medium">
+                    You need to be signed in for checkout
+                  </p>
+                  <Link
+                    href="/sign-up"
+                    className="mt-6 underline hover:cursor-pointer"
+                  >
+                    Click here to sign in
+                  </Link>
+                </div>
+              )}
             </div>
           </div>
         ) : (
