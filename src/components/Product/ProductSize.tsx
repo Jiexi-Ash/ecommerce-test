@@ -9,7 +9,8 @@ function ProductSize({ size, onHandleSize }: Sizes) {
   const [selectedSize, setSelectedSize] = useState<string>("");
 
   const handleClick = (size: string) => {
-    setSelectedSize(size);
+    console.log(size);
+    setSelectedSize(size.toUpperCase());
     onHandleSize(size);
   };
 
@@ -19,12 +20,12 @@ function ProductSize({ size, onHandleSize }: Sizes) {
         Size: <span className="font-medium">Small</span>
       </div>
       <div className="mt-4  flex space-x-2">
-        {size.map((size) => (
+        {size.map((size, index) => (
           <div
-            key={size}
+            key={`${size}-${index}`}
             onClick={() => handleClick(size)}
-            className={`flex h-10 w-10 cursor-pointer items-center justify-center border border-gray-100 bg-white duration-200 ease-in-out hover:cursor-pointer hover:bg-slate-200 ${
-              selectedSize === size ? "bg-gray-200" : ""
+            className={`flex h-10 w-10 cursor-pointer items-center justify-center border border-gray-100 duration-200 ease-in-out hover:cursor-pointer ${
+              size === selectedSize ? "bg-black text-white" : ""
             }`}
           >
             {size}

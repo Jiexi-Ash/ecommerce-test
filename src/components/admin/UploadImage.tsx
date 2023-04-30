@@ -1,10 +1,13 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
 
-function UploadImage() {
+type UploadImageProps = {
+  handleSelectedImage: (image: string) => void;
+};
+
+function UploadImage({ handleSelectedImage }: UploadImageProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [previewImage, setPreviewImage] = useState<string>("");
-  const [selectedImage, setSelectedImage] = useState<string>("");
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     //  reset image state
@@ -16,7 +19,10 @@ function UploadImage() {
         const reader = new FileReader();
         reader.onload = (e) => {
           setPreviewImage(e.target?.result as string);
+          handleSelectedImage(e.target?.result as string);
         };
+
+        // add image data to parent component
         reader.readAsDataURL(file);
       }
     }
