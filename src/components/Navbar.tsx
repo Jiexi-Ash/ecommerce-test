@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
-
+import { useRouter } from "next/router";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { useUser, SignIn } from "@clerk/nextjs";
@@ -62,6 +62,7 @@ const UserButton = ({ handleClose }: UserButtonProps) => {
 };
 
 function Navbar() {
+  const router = useRouter();
   const [options, setOptions] = useState<boolean>(false);
   const dispatch = useAppDispatch();
   const cartQuantity = useAppSelector((state) => state.cart.totalQuantity);
@@ -154,12 +155,14 @@ function Navbar() {
                     </p>
                   </div>
                 </div>
-                <div className="flex w-full items-center space-x-8 px-6 py-4 hover:cursor-pointer hover:bg-gray-200">
-                  <div className="rounded-full">
-                    <Cog6ToothIcon className="h-5 w-5 text-gray-300" />
+                <Link href="/account/selling/profile" className="w-full">
+                  <div className="flex w-full items-center space-x-8 px-6 py-4 hover:cursor-pointer hover:bg-gray-200">
+                    <div className="rounded-full">
+                      <Cog6ToothIcon className="h-5 w-5 text-gray-300" />
+                    </div>
+                    <p className="text-left text-sm">Account</p>
                   </div>
-                  <p className="text-left text-sm">Manage Account</p>
-                </div>
+                </Link>
                 <div
                   className="flex w-full items-center space-x-8   px-6 py-4 hover:cursor-pointer hover:bg-gray-200"
                   // eslint-disable-next-line @typescript-eslint/no-misused-promises
