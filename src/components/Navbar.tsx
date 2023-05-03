@@ -101,7 +101,7 @@ function Navbar() {
   return (
     <header className="relative w-full border-b border-black px-6 py-6 xl:px-10">
       <>
-        <nav className="flex w-full items-center justify-between">
+        <nav className="flex w-full max-w-9xl items-center justify-between">
           <ul className="hidden items-center space-x-6 lg:flex ">
             <li>
               <Link
@@ -178,7 +178,7 @@ function Navbar() {
           )}
 
           <Link href="/">
-            <h1 className="text-lg font-medium uppercase">Flee-mark</h1>
+            <div className="text-lg font-medium uppercase">Flee-mark</div>
           </Link>
 
           <ul className="hidden space-x-6 lg:flex">

@@ -7,8 +7,6 @@ import Search from "~/components/Search";
 import Products from "~/components/Product/Products";
 
 const Home: NextPage = () => {
-
-
   return (
     <>
       <Head>
@@ -20,7 +18,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Navbar />
-      <main className="flex min-h-screen w-full flex-col">
+      <main className="flex min-h-screen w-full max-w-9xl flex-col">
         <Search />
         <div className="flex w-full py-4 px-6 xl:px-10"></div>
         <Products />

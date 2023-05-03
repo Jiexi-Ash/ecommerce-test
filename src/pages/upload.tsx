@@ -5,7 +5,7 @@ import Head from "next/head";
 import Link from "next/link";
 
 import { api } from "~/utils/api";
-import { MultiUploader } from "~/components/admin/Uploader";
+import { MultiUploader } from "~/components/Account/Uploader";
 
 const Upload: NextPage = () => {
   return (

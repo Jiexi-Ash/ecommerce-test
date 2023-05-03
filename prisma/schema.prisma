@@ -23,9 +23,9 @@ model Product {
     sizes     Size[]
     salePrice Int?
     sale      Boolean  @default(false)
-    sellerId  String
+    storeId   String
 
-    @@index([sellerId])
+    @@index([storeId])
 }
 
 model Size {
@@ -37,6 +37,16 @@ model Size {
     Product   Product  @relation(fields: [productId], references: [id])
 
     @@index([productId])
+}
+
+model Store {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    name      String
+    userId    String
+
+    @@index([userId])
 }
 
 // one to one table for role and user

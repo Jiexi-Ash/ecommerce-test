@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { AddProductForm } from "~/components/admin/AddProductModal";
+import type { AddProductForm } from "~/components/Account/AddProductModal";
 
 export const useInput = (
   initialValue: string | number,
