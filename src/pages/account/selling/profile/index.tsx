@@ -9,6 +9,7 @@ import Search from "~/components/Search";
 
 const Profile: NextPage = () => {
   const [storeName, setStoreName] = useState<string>("");
+  const [isTermsAccepted, setIsTermsAccepted] = useState<boolean>(false);
 
   return (
     <>
@@ -89,6 +90,8 @@ const Profile: NextPage = () => {
                     type="checkbox"
                     value=""
                     className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-blue-600  focus:ring-0"
+                    checked={isTermsAccepted}
+                    onChange={() => setIsTermsAccepted(!isTermsAccepted)}
                   />
                   <label
                     htmlFor="default-checkbox"

@@ -40,11 +40,13 @@ model Size {
 }
 
 model Store {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    name      String
-    userId    String
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    name        String
+    industry    String?
+    description String?
+    userId      String
 
     @@index([userId])
 }

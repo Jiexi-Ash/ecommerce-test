@@ -19,12 +19,12 @@ export const productsRouter = createTRPCRouter({
         image: z.string(),
         category: z.string(),
         size: array(z.string()),
-        sellerId: z.string(),
+        storeId: z.string(),
       })
     )
     .query(async ({ ctx, input }) => {
       const userID = ctx.auth.userId;
-      const { name, price, quantity, image, sellerId, category, size } = input;
+      const { name, price, quantity, image, storeId, category, size } = input;
       const getRole = await ctx.prisma.profile.findUnique({
         where: { id: userID },
         select: { role: true },
@@ -47,7 +47,7 @@ export const productsRouter = createTRPCRouter({
             quantity,
             image,
             category,
-            sellerId: sellerId,
+            storeId: storeId,
             sizes: {
               create: size.map((size) => ({
                 size,
