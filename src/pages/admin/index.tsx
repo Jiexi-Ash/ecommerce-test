@@ -35,20 +35,7 @@ const Admin: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AdminNav />
-      <main className="flex min-h-screen w-full">
-        <SideNav />
-        <div className=" w-full bg-gray-50 px-6 py-10 lg:w-[calc(100%-300px)] lg:px-10">
-          <div className="flex w-full">
-            <form className="w-full">
-              <input
-                type="text"
-                className="w-full rounded-lg border border-gray-200 bg-inherit px-4 py-2 focus:border focus:border-gray-300 focus:outline-none focus:ring-0"
-                placeholder="Search..."
-              />
-            </form>
-          </div>
-        </div>
-      </main>
+      <main className="flex min-h-screen w-full"></main>
     </>
   );
 };

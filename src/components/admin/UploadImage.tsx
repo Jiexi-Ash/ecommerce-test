@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import Image from "next/image";
+import { MultiUploader } from "./Uploader";
 
 type UploadImageProps = {
   handleSelectedImage: (image: string) => void;
@@ -34,7 +35,7 @@ function UploadImage({ handleSelectedImage }: UploadImageProps) {
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center  bg-slate-50 ">
-      {previewImage && (
+      {/* {previewImage && (
         <Image
           src={previewImage}
           alt="product image"
@@ -61,7 +62,8 @@ function UploadImage({ handleSelectedImage }: UploadImageProps) {
             Add Image
           </button>
         )}
-      </div>
+      </div> */}
+      <MultiUploader />
     </div>
   );
 }

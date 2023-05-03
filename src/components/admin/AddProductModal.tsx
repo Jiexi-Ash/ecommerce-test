@@ -1,18 +1,16 @@
 import React, { useState } from "react";
 
-import Image from "next/image";
-
-import { PlusCircleIcon } from "@heroicons/react/24/outline";
 import { motion } from "framer-motion";
 
 import Backdrop from "../Modal/Backdrop";
-import UploadImage from "./UploadImage";
+
+import { useInput } from "~/hooks/useInput";
 
 type TAddProductModal = {
   handleClose: () => void;
 };
 
-type AddProductForm = {
+export type AddProductForm = {
   id?: string;
   name: string;
   image: string;
@@ -33,6 +31,21 @@ function AddProductModal({ handleClose }: TAddProductModal) {
     quantity: 0,
     sizes: [],
   });
+
+  const name = useInput(addProductForm.name, "name", setAddProductForm);
+  const price = useInput(addProductForm.price, "price", setAddProductForm);
+  const category = useInput(
+    addProductForm.price,
+    "category",
+    setAddProductForm
+  );
+  const quantity = useInput(
+    addProductForm.quantity,
+    "quantity",
+    setAddProductForm
+  );
+
+  const [error, setError] = useState<string>("");
 
   const handleSelectedImage = (image: string) => {
     setSelectedImage(image);
@@ -83,6 +96,19 @@ function AddProductModal({ handleClose }: TAddProductModal) {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log(addProductForm);
+
+    // check if form is valid
+    if (
+      addProductForm.name === "" ||
+      addProductForm.image === "" ||
+      addProductForm.price === 0 ||
+      addProductForm.category === "" ||
+      addProductForm.quantity === 0 ||
+      addProductForm.sizes?.length === 0
+    ) {
+      setError("Please fill out all fields");
+      return;
+    }
   };
 
   const modalVariants = {
@@ -109,43 +135,26 @@ function AddProductModal({ handleClose }: TAddProductModal) {
         initial="hidden"
         animate="visible"
         exit="exit"
-        className="mx-6 max-h-[700px] w-full overflow-y-auto rounded-sm bg-white  p-10 shadow-lg  lg:mx-0 lg:max-w-4xl"
+        className="mx-6 max-h-[600px] w-full overflow-y-auto rounded-sm bg-white px-6  py-10 shadow-lg lg:mx-0 lg:max-w-xl"
       >
-        <div className="flex h-full flex-col">
+        <div className="flex flex-col">
           <div className="flex w-full justify-between">
             <h2 className="text-xl font-bold">Add Product</h2>
           </div>
 
           <div className="mt-6 flex h-full w-full justify-between space-x-6">
-            <UploadImage handleSelectedImage={handleSelectedImage} />
             <div className="flex h-full  w-full bg-white">
               <div className="w-full">
                 <form onSubmit={handleSubmit}>
-                  <FormInput
-                    name="name"
-                    type="text"
-                    label="Name"
-                    onChangeHandler={handleFormChange}
-                  />
-                  <FormInput
-                    name="category"
-                    type="text"
-                    label="Category"
-                    onChangeHandler={handleFormChange}
-                  />
-                  <div className="flex space-x-4">
-                    <FormInput
-                      type="number"
-                      label="Price"
-                      name="price"
-                      onChangeHandler={handleFormChange}
-                    />
-                    <FormInput
-                      type="number"
-                      label="Quantity"
-                      name="quantity"
-                      onChangeHandler={handleFormChange}
-                    />
+                  <div className="mb-6 flex flex-col">
+                    <FormInput type="text" label="Name" {...name} />
+                  </div>
+                  <div className="mb-6 flex flex-col">
+                    <FormInput type="text" label="Category" {...category} />
+                  </div>
+                  <div className="mb-6 flex space-x-4 ">
+                    <FormInput type="number" label="Price" {...price} />
+                    <FormInput type="number" label="Quantity" {...quantity} />
                   </div>
                   <div className="flex flex-col">
                     <p>Sizes</p>
@@ -165,23 +174,12 @@ function AddProductModal({ handleClose }: TAddProductModal) {
                       ))}
                     </div>
                   </div>
-                  <div className="mt-6 flex flex-col">
-                    <p>Images</p>
-                    <div className="mt-3 flex space-x-3">
-                      <div className="flex h-20 w-20 items-center justify-center border">
-                        {selectedImage && (
-                          <Image
-                            src={selectedImage}
-                            alt="product image"
-                            width={50}
-                            height={50}
-                            objectFit="cover"
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </div>
 
+                  {error && (
+                    <p className="mt-2 pl-2 text-xs italic text-red-500">
+                      {error}
+                    </p>
+                  )}
                   <div className="flex w-full justify-between space-x-6">
                     <button
                       type="submit"
@@ -209,15 +207,16 @@ function AddProductModal({ handleClose }: TAddProductModal) {
 export default AddProductModal;
 
 type FormInputProps = {
-  onChangeHandler: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type: string;
   name: string;
   label: string;
+  value: string | number;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
-const FormInput = ({ onChangeHandler, type, name, label }: FormInputProps) => {
+const FormInput = ({ type, name, label, value, onChange }: FormInputProps) => {
   return (
-    <div className="mb-6 flex flex-col">
+    <div className="flex flex-col">
       <label htmlFor={name} className="mb-2">
         {label}
       </label>
@@ -226,7 +225,8 @@ const FormInput = ({ onChangeHandler, type, name, label }: FormInputProps) => {
         name={name}
         id={name}
         className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-gray-300 focus:ring-0"
-        onChange={onChangeHandler}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
