@@ -46,7 +46,7 @@ model Store {
     name        String
     industry    String?
     description String?
-    userId      String
+    userId      String   @unique
 
     @@index([userId])
 }
