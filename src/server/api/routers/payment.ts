@@ -8,13 +8,6 @@ import {
 
 import axios from "axios";
 
-type purchaseUnit = {
-  amount: {
-    currency_code: string;
-    value: string;
-  };
-};
-
 const baseURL = process.env.PAYPAL_URL;
 const generateAccessToken = async () => {
   const baseURL = process.env.PAYPAL_URL;
@@ -26,6 +19,7 @@ const generateAccessToken = async () => {
   }
 
   const response = await axios.post(
+    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     `${baseURL!}/v1/oauth2/token`,
     "grant_type=client_credentials",
     {
@@ -70,11 +64,6 @@ export const paymentRouter = createTRPCRouter({
       const { purchase_units } = input;
       const accessToken = await generateAccessToken();
 
-      const data = JSON.stringify({
-        intent: "capture",
-        purchase_units,
-      });
-
       try {
         const response = await axios.post(
           "https://api.sandbox.paypal.com/v2/checkout/orders",
@@ -106,15 +95,14 @@ export const paymentRouter = createTRPCRouter({
         order_id: z.string(),
       })
     )
-    .mutation(async ({ ctx, input }) => {
+    .mutation(async ({ input }) => {
       const token = await generateAccessToken();
 
       const { order_id } = input;
 
-      const userID = ctx.auth.userId;
-
       try {
         const response = await axios.post(
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
           baseURL! + "/v2/checkout/orders/" + order_id + "/capture",
           {},
           {

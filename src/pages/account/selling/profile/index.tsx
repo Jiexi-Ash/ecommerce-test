@@ -1,13 +1,11 @@
 import { type NextPage } from "next";
 import Head from "next/head";
-import Link from "next/link";
-import { useState } from "react";
+
 import AccountHeader from "~/components/Account/AccountHeader";
 import AddStore from "~/components/Account/Store/AddStore";
 import EditStore from "~/components/Account/Store/EditStore";
 
 import Navbar from "~/components/Navbar";
-import Search from "~/components/Search";
 
 import { api } from "~/utils/api";
 
