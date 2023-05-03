@@ -1,6 +1,7 @@
 import { createFilething, type FileRouter } from "uploadthing/server";
 const f = createFilething();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
 
 // FileRouter for your app, can contain multiple FileRoutes
@@ -12,6 +13,7 @@ export const ourFileRouter = {
     .maxSize("1GB")
     .middleware(async (req) => {
       // This code runs on your server before upload
+      // eslint-disable-next-line @typescript-eslint/await-thenable
       const user = await auth(req);
 
       // If you throw, the user will not be able to upload
@@ -20,8 +22,10 @@ export const ourFileRouter = {
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };
     })
+    // eslint-disable-next-line @typescript-eslint/require-await
     .onUploadComplete(async ({ metadata, file }) => {
       // This code RUNS ON YOUR SERVER after upload
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
       console.log(`file`, `https://uploadthing.com/f/${(file as any).fileKey}`);
       console.log("Upload complete for userId:", metadata.userId);
     }),
