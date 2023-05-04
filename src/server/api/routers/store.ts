@@ -65,9 +65,9 @@ export const storeRouter = createTRPCRouter({
             userId: userID,
           },
           data: {
-            name,
-            industry,
-            description,
+            name: name,
+            industry: industry,
+            description: description,
           },
         });
 
