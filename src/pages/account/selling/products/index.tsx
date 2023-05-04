@@ -2,11 +2,11 @@ import { type NextPage } from "next";
 import Head from "next/head";
 
 import AccountHeader from "~/components/Account/AccountHeader";
-import AddProduct from "~/components/Account/Store/Products/AddProduct";
+import Products from "~/components/Account/Store/Products/Products";
 
 import Navbar from "~/components/Navbar";
 
-const Products: NextPage = () => {
+const ProductsPage: NextPage = () => {
   return (
     <>
       <Head>
@@ -24,10 +24,10 @@ const Products: NextPage = () => {
         </div>
         <AccountHeader />
 
-        <AddProduct />
+        <Products />
       </main>
     </>
   );
 };
 
-export default Products;
+export default ProductsPage;

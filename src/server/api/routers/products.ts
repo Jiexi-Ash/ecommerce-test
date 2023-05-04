@@ -1,3 +1,4 @@
+import { Product } from "@prisma/client";
 import { array, z } from "zod";
 
 import {

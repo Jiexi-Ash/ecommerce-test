@@ -5,28 +5,31 @@ import { motion } from "framer-motion";
 import Backdrop from "../../../Modal/Backdrop";
 import { useInput } from "~/hooks/useInput";
 import { api } from "~/utils/api";
-import type { Store } from "@prisma/client";
+import type { Product, Store } from "@prisma/client";
 
 type TAddProductModal = {
   handleClose: () => void;
+  handleProduct?: (product: Product) => void;
 };
 
 export type AddProductForm = {
   id?: string;
   name: string;
+  description?: string;
   price: number;
   category: string;
   quantity: number;
   sizes?: string[];
 };
 
-function AddProductModal({ handleClose }: TAddProductModal) {
+function AddProductModal({ handleClose, handleProduct }: TAddProductModal) {
   const [error, setError] = useState<string>("");
   const [sizes, setSizes] = useState<string[]>(["XS", "S", "M", "L", "XL"]);
   const [addProductForm, setAddProductForm] = useState<AddProductForm>({
     name: "",
     price: 0,
     category: "",
+    description: "",
     quantity: 0,
     sizes: [],
   });
@@ -47,7 +50,9 @@ function AddProductModal({ handleClose }: TAddProductModal) {
   const store = api.store.getStore.useQuery().data as Store;
   const { mutate: createProduct } = api.products.createProduct.useMutation({
     onSuccess: (data) => {
-      console.log(data);
+      const product = data as Product;
+      handleProduct && handleProduct(product);
+      handleClose();
     },
   });
 
@@ -68,6 +73,13 @@ function AddProductModal({ handleClose }: TAddProductModal) {
         sizes: [...prevState.sizes!, size],
       }));
     }
+  };
+
+  const handleDescription = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setAddProductForm((prevState) => ({
+      ...prevState,
+      description: e.target.value,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -119,7 +131,7 @@ function AddProductModal({ handleClose }: TAddProductModal) {
         initial="hidden"
         animate="visible"
         exit="exit"
-        className="mx-6 max-h-[600px] w-full overflow-y-auto rounded-sm bg-white px-6  py-10 shadow-lg lg:mx-0 lg:max-w-xl"
+        className="mx-6 max-h-[750px] w-full overflow-y-auto rounded-sm bg-white px-6  py-10 shadow-lg lg:mx-0 lg:max-w-xl"
       >
         <div className="flex flex-col">
           <div className="flex w-full justify-between">
@@ -132,6 +144,17 @@ function AddProductModal({ handleClose }: TAddProductModal) {
                 <form onSubmit={handleSubmit}>
                   <div className="mb-6 flex flex-col">
                     <FormInput type="text" label="Name" {...name} />
+                  </div>
+                  <div className="mb-6 flex flex-col">
+                    <label htmlFor="description" className="mb-2">
+                      Description
+                    </label>
+                    <textarea
+                      rows={4}
+                      name="description"
+                      onChange={handleDescription}
+                      className="w-full rounded-lg border border-gray-200 px-4 py-2 focus:border-gray-300 focus:ring-0"
+                    />
                   </div>
                   <div className="mb-6 flex flex-col">
                     <FormInput type="text" label="Category" {...category} />
@@ -200,7 +223,7 @@ type FormInputProps = {
 
 const FormInput = ({ type, name, label, value, onChange }: FormInputProps) => {
   return (
-    <div className="flex flex-col">
+    <div className="flex w-full flex-col">
       <label htmlFor={name} className="mb-2">
         {label}
       </label>

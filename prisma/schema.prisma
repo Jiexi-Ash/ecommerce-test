@@ -16,7 +16,7 @@ model Product {
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
     name        String
-    description String?
+    description String?  @default("")
     price       Int
     quantity    Int
     category    String
