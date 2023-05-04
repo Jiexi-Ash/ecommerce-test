@@ -12,18 +12,19 @@ generator client {
 }
 
 model Product {
-    id        String   @id @default(cuid())
-    createdAt DateTime @default(now())
-    updatedAt DateTime @updatedAt
-    name      String
-    price     Int
-    quantity  Int
-    category  String
-    sizes     Size[]
-    salePrice Int?
-    sale      Boolean  @default(false)
-    storeId   String
-    Image     Image[]
+    id          String   @id @default(cuid())
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+    name        String
+    description String?
+    price       Int
+    quantity    Int
+    category    String
+    sizes       Size[]
+    salePrice   Int?
+    sale        Boolean  @default(false)
+    storeId     String
+    Image       Image[]
 
     @@index([storeId])
 }

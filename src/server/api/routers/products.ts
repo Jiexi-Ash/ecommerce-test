@@ -14,6 +14,7 @@ export const productsRouter = createTRPCRouter({
     .input(
       z.object({
         name: z.string(),
+        description: z.string().optional(),
         price: z.number(),
         quantity: z.number(),
         category: z.string(),
@@ -22,13 +23,15 @@ export const productsRouter = createTRPCRouter({
       })
     )
     .mutation(async ({ ctx, input }) => {
-      const { name, price, quantity, storeId, category, size } = input;
+      const { name, price, quantity, storeId, category, size, description } =
+        input;
 
       try {
         // create product and add size to product
         const product = await ctx.prisma.product.create({
           data: {
             name,
+            description,
             price,
             quantity,
             category,

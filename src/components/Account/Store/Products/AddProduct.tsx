@@ -1,9 +1,31 @@
 import { AnimatePresence } from "framer-motion";
-import React, { useState } from "react";
-import AddProductModal from "../AddProductModal";
-
+import React, { useEffect, useState } from "react";
+import AddProductModal from "./AddProductModal";
+import { useRouter } from "next/router";
 function AddProduct() {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      void router.push(
+        "/account/selling/products",
+        "/account/selling/products/add",
+        {
+          shallow: true,
+        }
+      );
+    } else {
+      void router.push(
+        "/account/selling/products",
+        "/account/selling/products",
+        {
+          shallow: true,
+        }
+      );
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isOpen]);
   return (
     <>
       <div className="mt-6 flex flex-col px-6">

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 
 import { motion } from "framer-motion";
 
-import Backdrop from "../Modal/Backdrop";
+import Backdrop from "../../../Modal/Backdrop";
 import { useInput } from "~/hooks/useInput";
 import { api } from "~/utils/api";
 import type { Store } from "@prisma/client";

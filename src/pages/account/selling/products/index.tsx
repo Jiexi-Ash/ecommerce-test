@@ -2,7 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 
 import AccountHeader from "~/components/Account/AccountHeader";
-import AddProduct from "~/components/Account/Store/AddProduct";
+import AddProduct from "~/components/Account/Store/Products/AddProduct";
 
 import Navbar from "~/components/Navbar";
 
