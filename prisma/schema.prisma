@@ -18,14 +18,25 @@ model Product {
     name      String
     price     Int
     quantity  Int
-    image     String
     category  String
     sizes     Size[]
     salePrice Int?
     sale      Boolean  @default(false)
     storeId   String
+    Image     Image[]
 
     @@index([storeId])
+}
+
+model Image {
+    id        String   @id @default(cuid())
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    url       String
+    productId String
+    Product   Product  @relation(fields: [productId], references: [id])
+
+    @@index([productId])
 }
 
 model Size {

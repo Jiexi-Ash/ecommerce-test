@@ -3,8 +3,9 @@ import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 import Backdrop from "../Modal/Backdrop";
-
 import { useInput } from "~/hooks/useInput";
+import { api } from "~/utils/api";
+import type { Store } from "@prisma/client";
 
 type TAddProductModal = {
   handleClose: () => void;
@@ -13,7 +14,6 @@ type TAddProductModal = {
 export type AddProductForm = {
   id?: string;
   name: string;
-  image: string;
   price: number;
   category: string;
   quantity: number;
@@ -21,11 +21,10 @@ export type AddProductForm = {
 };
 
 function AddProductModal({ handleClose }: TAddProductModal) {
-  const [selectedImage, setSelectedImage] = useState<string>("");
+  const [error, setError] = useState<string>("");
   const [sizes, setSizes] = useState<string[]>(["XS", "S", "M", "L", "XL"]);
   const [addProductForm, setAddProductForm] = useState<AddProductForm>({
     name: "",
-    image: "",
     price: 0,
     category: "",
     quantity: 0,
@@ -35,7 +34,7 @@ function AddProductModal({ handleClose }: TAddProductModal) {
   const name = useInput(addProductForm.name, "name", setAddProductForm);
   const price = useInput(addProductForm.price, "price", setAddProductForm);
   const category = useInput(
-    addProductForm.price,
+    addProductForm.category,
     "category",
     setAddProductForm
   );
@@ -45,34 +44,12 @@ function AddProductModal({ handleClose }: TAddProductModal) {
     setAddProductForm
   );
 
-  const [error, setError] = useState<string>("");
-
-  const handleSelectedImage = (image: string) => {
-    setSelectedImage(image);
-  };
-
-  const handleFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    if (name === "price" || "quantity" || "salePrice") {
-      // regex numbers only
-      const regex = /^[0-9\b]+$/;
-
-      if (value === "" || regex.test(value)) {
-        setAddProductForm((prevState) => ({
-          ...prevState,
-          [name]: Number(value),
-        }));
-      }
-    }
-
-    if (name === "name" || "image" || "category" || "image") {
-      setAddProductForm((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-  };
+  const store = api.store.getStore.useQuery().data as Store;
+  const { mutate: createProduct } = api.products.createProduct.useMutation({
+    onSuccess: (data) => {
+      console.log(data);
+    },
+  });
 
   const handleSelectedSizes = (size: string) => {
     // check if size is already on the form.size array
@@ -95,12 +72,10 @@ function AddProductModal({ handleClose }: TAddProductModal) {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(addProductForm);
 
     // check if form is valid
     if (
       addProductForm.name === "" ||
-      addProductForm.image === "" ||
       addProductForm.price === 0 ||
       addProductForm.category === "" ||
       addProductForm.quantity === 0 ||
@@ -109,6 +84,15 @@ function AddProductModal({ handleClose }: TAddProductModal) {
       setError("Please fill out all fields");
       return;
     }
+
+    createProduct({
+      name: addProductForm.name,
+      price: Number(addProductForm.price),
+      category: addProductForm.category,
+      size: addProductForm.sizes!,
+      quantity: Number(addProductForm.quantity),
+      storeId: store.id,
+    });
   };
 
   const modalVariants = {

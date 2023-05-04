@@ -16,27 +16,13 @@ export const productsRouter = createTRPCRouter({
         name: z.string(),
         price: z.number(),
         quantity: z.number(),
-        image: z.string(),
         category: z.string(),
         size: array(z.string()),
         storeId: z.string(),
       })
     )
-    .query(async ({ ctx, input }) => {
-      const userID = ctx.auth.userId;
-      const { name, price, quantity, image, storeId, category, size } = input;
-      const getRole = await ctx.prisma.profile.findUnique({
-        where: { id: userID },
-        select: { role: true },
-      });
-
-      if (!getRole) {
-        throw new Error("User not found");
-      }
-
-      if (getRole.role !== "BUSINESS") {
-        throw new Error("User is not an BUSINESS");
-      }
+    .mutation(async ({ ctx, input }) => {
+      const { name, price, quantity, storeId, category, size } = input;
 
       try {
         // create product and add size to product
@@ -45,7 +31,6 @@ export const productsRouter = createTRPCRouter({
             name,
             price,
             quantity,
-            image,
             category,
             storeId: storeId,
             sizes: {
@@ -55,6 +40,7 @@ export const productsRouter = createTRPCRouter({
             },
           },
         });
+        console.log(product);
 
         return product;
       } catch (e) {
