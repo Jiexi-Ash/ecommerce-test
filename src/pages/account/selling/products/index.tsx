@@ -2,6 +2,7 @@ import { type NextPage } from "next";
 import Head from "next/head";
 
 import AccountHeader from "~/components/Account/AccountHeader";
+import AddProduct from "~/components/Account/Store/AddProduct";
 
 import Navbar from "~/components/Navbar";
 
@@ -22,6 +23,8 @@ const Products: NextPage = () => {
           <h1 className="text-2xl font-bold">My Account</h1>
         </div>
         <AccountHeader />
+
+        <AddProduct />
       </main>
     </>
   );

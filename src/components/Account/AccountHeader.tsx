@@ -13,7 +13,7 @@ function AccountHeader() {
           <Link href="" className="text-sm">
             Profile
           </Link>
-          <Link href="" className="text-sm">
+          <Link href="/account/selling/products" className="text-sm">
             Products
           </Link>
           <Link href="" className="text-sm">

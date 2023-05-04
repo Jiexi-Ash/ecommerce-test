@@ -28,7 +28,7 @@ export const storeRouter = createTRPCRouter({
 
         return store;
       } catch (e) {
-        throw new Error("Error creating store");
+        throw new Error(e.message as string);
       }
     }),
   getStore: protectedProcedure.query(async ({ ctx }) => {
@@ -73,7 +73,7 @@ export const storeRouter = createTRPCRouter({
 
         return store;
       } catch (e) {
-        throw new Error("Error updating store");
+        throw new Error(e.message as string);
       }
     }),
 });
