@@ -30,7 +30,7 @@
     "react-redux": "^8.0.5",
     "superjson": "1.12.2",
     "svix": "^0.83.1",
-    "uploadthing": "^2.0.1",
+    "uploadthing": "^2.0.2-canary.d9a1af2",
     "zod": "^3.21.4",
     "zustand": "^4.3.7"
   },

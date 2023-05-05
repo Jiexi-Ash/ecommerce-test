@@ -27,6 +27,7 @@ type UserButtonProps = {
 const UserButton = ({ handleClose }: UserButtonProps) => {
   useCart();
   const user = useUser();
+  console.log(user);
 
   if (!user) return null;
   const username = user.user?.username;

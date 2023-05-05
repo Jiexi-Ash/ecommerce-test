@@ -9,7 +9,15 @@ import {
 
 export const productsRouter = createTRPCRouter({
   getAll: publicProcedure.query(async ({ ctx }) => {
-    return ctx.prisma.product.findMany();
+    // find products including sizes and images
+    const products = await ctx.prisma.product.findMany({
+      include: {
+        sizes: true,
+        Image: true,
+      },
+    });
+
+    return products;
   }),
   createProduct: protectedProcedure
     .input(
@@ -50,5 +58,31 @@ export const productsRouter = createTRPCRouter({
       } catch (e) {
         return e;
       }
+    }),
+  uploadImage: protectedProcedure
+    .input(
+      z.object({
+        productId: z.string(),
+        url: z.string(),
+      })
+    )
+    .mutation(async ({ ctx, input }) => {
+      const { productId, url } = input;
+
+      if (!productId || !url) {
+        throw new Error("productId or url is missing");
+      }
+
+      try {
+        // create image and add to product
+        const image = await ctx.prisma.image.create({
+          data: {
+            url,
+            productId,
+          },
+        });
+
+        return image;
+      } catch (e) {}
     }),
 });

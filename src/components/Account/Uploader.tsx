@@ -16,7 +16,7 @@ export function MultiUploader() {
   };
 
   return (
-    <div {...getRootProps()} className="border border-white px-10 py-10">
+    <div {...getRootProps()} className="h-10  w-20 border border-white">
       <input {...getInputProps()} />
       <div>
         {files.length > 0 && files.length <= 4 && (

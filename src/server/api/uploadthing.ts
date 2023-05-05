@@ -1,5 +1,9 @@
 import { createFilething, type FileRouter } from "uploadthing/server";
-const f = createFilething();
+
+import { getAuth } from "@clerk/nextjs/server";
+import { prisma } from "../db";
+
+const f = createFilething<"pages">();
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const auth = (req: Request) => ({ id: "fakeId" }); // Fake auth function
@@ -11,16 +15,17 @@ export const ourFileRouter = {
     // Set permissions and file types for this FileRoute
     .fileTypes(["image", "video"])
     .maxSize("1GB")
-    .middleware(async (req) => {
+    .middleware((req) => {
       // This code runs on your server before upload
       // eslint-disable-next-line @typescript-eslint/await-thenable
-      const user = await auth(req);
+      const user = getAuth(req);
+      console.log("User:", user);
 
       // If you throw, the user will not be able to upload
       if (!user) throw new Error("Unauthorized");
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
-      return { userId: user.id };
+      return { userId: user.userId };
     })
     // eslint-disable-next-line @typescript-eslint/require-await
     .onUploadComplete(async ({ metadata, file }) => {
