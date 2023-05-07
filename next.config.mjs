@@ -8,7 +8,7 @@
 const config = {
   reactStrictMode: true,
   images: {
-    domains: ["images.clerk.dev"],
+    domains: ["images.clerk.dev", "uploadthing.com"],
   },
   experimental: {
     esmExternals: false, // THIS IS THE FLAG THAT MATTERS
